@@ -15,8 +15,7 @@ theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
                       fig.width = 6,
-                      fig.height = 5,
-                      echo = FALSE)
+                      fig.height = 5)
 ```
 
 ```{r read}
