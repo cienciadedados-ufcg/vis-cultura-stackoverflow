@@ -1,0 +1,141 @@
+---
+title: "REPLACE ME"
+output:
+    html_document:
+    df_print: paged
+theme: sandstone
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+library(viridis)
+source(here::here("code/lib.R"))
+theme_set(theme_bw())
+
+knitr::opts_chunk$set(tidy = FALSE,
+                      fig.width = 6,
+                      fig.height = 5,
+                      echo = FALSE)
+```
+
+```{r read}
+dados = read_csv(
+    here::here("data/participation-per-country.csv"),
+    col_types = cols(
+        .default = col_double(),
+        site = col_character(),
+        country = col_character(),
+        geo = col_character(),
+        four_regions = col_character(),
+        eight_regions = col_character(),
+        six_regions = col_character(),
+        `World bank income group 2017` = col_character()
+    )
+) %>% 
+    filter(usuarios > 200)
+glimpse(dados)
+```
+
+```{r}
+dados %>% 
+    ggplot(aes(x = IDV, y = responderam_prop)) + 
+    geom_point()
+```
+
+
+```{r}
+dados %>% 
+    ggplot(aes(x = IDV, y = responderam_prop, color = site)) + 
+    geom_point()
+```
+
+```{r}
+dados %>%
+    ggplot(aes(
+        x = IDV,
+        y = responderam_prop,
+        color = site,
+        size = log10(usuarios)
+    )) +
+    geom_point(alpha = .6)
+
+dados %>%
+    ggplot(aes(
+        size = IDV,
+        y = responderam_prop,
+        color = site,
+        x = log10(usuarios)
+    )) +
+    geom_point(alpha = .6)
+```
+
+```{r}
+dados %>%
+    ggplot(aes(
+        x = IDV,
+        y = responderam_prop,
+        color = Internet,
+        size = log10(usuarios)
+    )) +
+    geom_point(alpha = .6) + 
+    facet_grid(site ~ ., scales = "free_y")
+
+dados %>%
+    ggplot(aes(
+        x = IDV,
+        y = responderam_prop,
+        size = Internet,
+        color = log10(usuarios)
+    )) +
+    geom_point(alpha = .6) + 
+    facet_grid(site ~ ., scales = "free_y")
+```
+
+```{r}
+so = dados %>% 
+    filter(site == "StackOverflow") %>% 
+    sample_n(20)
+
+so %>%
+    ggplot(aes(
+        x = country,
+        color = responderam_prop,
+        y = ""
+    )) +
+    geom_point(size = 4) + 
+    coord_flip()
+
+so %>%
+    ggplot(aes(
+        x = country,
+        size = responderam_prop,
+        y = ""
+    )) +
+    geom_point(alpha = .3) + 
+    coord_flip()
+```
+
+```{r}
+so %>%
+    ggplot(aes(
+        x = country,
+        y = "",
+        size = responderam_prop,
+        color = six_regions
+    )) +
+    geom_point() + 
+    coord_flip()
+```
+
+```{r}
+so %>%
+    ggplot(aes(
+        x = country,
+        y = responderam_prop,
+        color = six_regions
+    )) +
+    geom_point(size = 3) + 
+    coord_flip()
+```
+
