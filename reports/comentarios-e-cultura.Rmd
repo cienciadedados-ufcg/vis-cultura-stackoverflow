@@ -10,7 +10,7 @@ theme: sandstone
 library(tidyverse)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
+source(here::here("code/import_data.R"))
 theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
@@ -42,13 +42,66 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 
 ## Examinando essa relação
 
-Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
+Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.
+
+
+```{r}
+dados %>% 
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point(alpha = .67)+
+    scale_colour_distiller(palette="YlOrRd") +
+    scale_size_continuous(range = c(1, 10))
+```
+
 
 ## Outras formas de ver
 
 Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
 
+```{r}
+dados %>%
+    na.omit() %>% 
+    ggplot(aes(x = comentaram_prop, y = PDI, color = usuarios, size = Internet)) +
+    geom_point(alpha = 0.67) +
+    scale_color_distiller(palette="YlOrRd") +
+    scale_size_continuous(range = c(1, 10))
+```
+
+```{r}
+dados %>% 
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point(alpha = 0.67)+
+    scale_colour_distiller(palette="Set1") +
+    scale_size_continuous(range = c(1, 10))
+```
+
+```{r}
+dados %>% 
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point()+
+    scale_colour_distiller(palette="YlOrRd")
+```
+
+```{r}
+dados %>% 
+    ggplot(aes(x = usuarios, y = PDI, color = Internet, size = comentaram_prop)) +
+    geom_jitter(alpha = .67)+
+    scale_colour_distiller(palette="YlOrRd")
+```
+
+
 ## Bônus
 
 Inclua o continente dos países (`six_regions`) na visualização.
+
+
+```{r}
+dados %>% 
+    na.omit() %>% 
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point(alpha = .67)+
+    scale_colour_distiller(palette="YlOrRd") +
+    scale_size_continuous(range = c(1, 10)) +
+    facet_wrap(~six_regions, ncol = 2, scales="free")
+```
 
