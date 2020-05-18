@@ -1,5 +1,7 @@
 ---
-title: "Comentários e cultura"
+title: "FPCC II - Laboratório 3.2 - Comentários e cultura"
+author: "Narallynne Maciel de Araújo"
+date: "18 de Maio de 2020"
 output:
     html_document:
     df_print: paged
@@ -10,7 +12,15 @@ theme: sandstone
 library(tidyverse)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
+library(ggplot2)
+library(dplyr)
+install.packages("hrbrthemes")
+library(hrbrthemes)
+install.packages("plotly")
+library(plotly)
+install.packages("leaflet")
+library(leaflet)
+source(here::here("code/import_data.R"))
 theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
@@ -36,19 +46,141 @@ dados = read_csv(
 glimpse(dados)
 ```
 
+## Utilização do gráfico interativo com ggplotly()
+
+- Para visualização das informações dos gráficos a seguir, foi utilizada a bilbioteca plotly com o ggplotly() que trasnforma qualquer ggplot2 em gráficos interativos. 
+Ao passar o mouse pelos dados do gráfico, as informações são reveladas. No canto superior direito, apresenta-se um menu interativo, onde é possível salvar o gráfico em .png, aplicar zoom em uma determinada área, selecionar uma área determinada do gráfico, dentre outras opções. Dando clique duplo em algum ítem da legenda, é possível ocultar ou revelar informações a respeito daquele ítem específico
+
+# Questão 1
 Estamos interessados na relação entre quanto as pessoas de diferentes países comentam em questões dos outros. A proporção das pessoas do país que comentou nas questões de outros está medido na variável `comentaram_prop`. 
 
 Considerando essa variável, queremos examinar a relação entre ela e o quão hierárquicas são as relações em um país (`PDI`). Queremos também levar em conta o quanto as pessoas daquele país têm acesso à Internet (`Internet`) e qual o tamanho da base de dados que detectamos daquele país (`usuarios`). 
 
 ## Examinando essa relação
 
-Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
+Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.
 
+
+```{r echo=TRUE,fig.height=5, fig.width=9}
+
+p<- dados %>% na.omit() %>%
+    ggplot(aes(x = reorder(PDI, comentaram_prop), y = comentaram_prop,
+               site = site, PDI=PDI,
+               fill = six_regions,  país = country,
+               usuarios=usuarios, size = Internet))+
+    geom_point(alpha=0.7, color="black", stroke=0.3)+
+    labs(title = "Comentários realizados entre países", 
+         x = "PDI (Índice das Distâncias de Poder)", 
+         y = "Proporção de comentários dos países", 
+         fill = "Continentes (cores)/", 
+         size = "Acesso à Internet (tamanho)") +
+    theme(legend.text = element_text(size = 10), axis.text.x = element_text(angle = 90, hjust = 1))
+  
+ggplotly(p, tooltip = c("site", "comentaram_prop", "PDI", "país","usuarios", "Internet"))
+```
+- Discussão: 
+
+Examinando (i) a relação entre a proporção das pessoas dos países que comentaram nas questões de outros (ii) com o quão hierárquicas são as relações nos países (PDI). O PDI (Power Distance Index - Índice das Distâncias de Poder), segundo [este site](https://hi.hofstede-insights.com/national-culture), "expressa o grau em que os membros menos poderosos de uma sociedade aceitam e esperam que o poder seja distribuído de maneira desigual", ou seja, quanto maior o PDI, maior a aceitação das pessoas em haver uma hierarquia na desigualdade de poder e, quanto menor o PDI, mais as pessoas se esforçam para igualar a distribuição desse poder. 
+
+1 - conforme mostra o gráfico, à primeira vista, os continentes podem ser vistos como grupos. O grupo da Europa Central e Ásia (cor verde) apresenta maior porporção de comentários em outros países, como também apresentam os menores índices de PDI, enquanto que os países do grupo do Oriente Médio e norte da África (cor azul), sul da Ásia (cor violeta), grande parte da América (cor rosa) e uma parcela do leste da Ásia/Pacífico (cor marrom) apresentam menores porporções de comentários e os maiores PDIs. Isso leva a uma primeira conclusão de que países europeus (desenvolvidos), comentam mais nas questões de outros países e possuem maior pensamento de igualdade entre poderes (PDI). Por outro lado, grande parte dos países subdesenvolvidos comentam menos e se preocupam menos com a hierarquia de poderes. 
+
+2 - Curioso destacar que os países Coréia do Sul e China (PDI 60 e 80, resptivamente e proporção 0.1, ambos StackOverflow) são os que menos se importam com a igualdade entre poderes (PDI) e os que menos comentam. Em relação a China, isso pode se dar pelo fato de que a [China](https://pt.wikipedia.org/wiki/China#Pol%C3%ADtica) é um país com regime autoritário, principalmente em relação ao uso da internet, onde apenas 38.3 possuem acesso à Internet, considerando a China o país mais populoso do planeta. 
+
+3 - Quanto ao número de usuários dos sites com acesso à Internet (à primeira análise), os 5 continentes, exceto o Sul da Ásia (violeta) que corresponde à Índia, possuem tamanhos semelhantes quanto ao acesso. O Egito possui maior acesso, com índice 95 (Usuários SuperUser 333 X 1965 StackOverflow), PDI 70 e proporção de 0.1 de comentários. A Índia, possui o menor acesso, apenas 10.1 (Usuários SuperUser 8921 X 70970 StackOverflow), PDI 77 e proporção 0.1 de comentários. Em relação ao Egito, a Índia possui em torno de 36 vezes mais usuários no StackOverflow, por exemplo. Porém, o índice de aceso à Internet é o menor. Ambos os PDI são altos e a proporção de comentários são semelhantes. Já os países com PDI baixo e alto índice de proporção nas contribuições (como por exemplo, os do grupo da Europa e Ásia central) possuem índices de acesso de médio a alto. Conclui-se que há uma certa desproporção do acesso à Internet X Usuários nos países com maiores índices de PDI e menores índices de proporção de contribuição. Por outro lado, há um certo equilíbrio no acesso à Internet dos países com PDIs menores e maiores contribuições.
+
+```{r echo=TRUE}
+
+medianaInternet <- dados %>% na.omit() %>% summarise(mediana = median(Internet))
+minInternet <- dados %>% na.omit() %>% summarise(minimoInternet = min(Internet)) 
+maxInternet <- dados %>% na.omit() %>% summarise(maximoInternet = max(Internet))
+valores_internet <- c(minInternet, medianaInternet, maxInternet)
+print(valores_internet)
+```
+
+
+# Questão 2
 ## Outras formas de ver
 
-Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
+5 visualizações que usem as mesmas variáveis e também pontos, mas que são **menos eficazes** que a de cima.
 
-## Bônus
+- O gráfico G1 mostra uma visualização não linear das mesmas informações que o gráfico anterior. Embora o PDI esteja ordenado, facilitando a análise entre as variáveis, a visualização não é tão amigável.
+```{r echo=TRUE,fig.height=5, fig.width=9}
 
-Inclua o continente dos países (`six_regions`) na visualização.
+p1<- dados %>% na.omit() %>%
+    ggplot(aes(x = reorder(PDI, PDI), y = comentaram_prop,
+               site = site, PDI=PDI,
+               fill = six_regions,  país = country,
+               usuarios=usuarios, size = Internet))+
+    geom_point(alpha=0.7, color="black", stroke=0.3)+
+    labs(title = "G1 - Visualização não linear", 
+         x = "PDI (Índice das Distâncias de Poder)", 
+         y = "Proporção de comentários dos países", 
+         fill = "Continentes (cores)/", 
+         size = "Acesso à Internet (tamanho)") +
+    theme(legend.text = element_text(size = 10), axis.text.x = element_text(angle = 90, hjust = 1))
+  
+ggplotly(p1, tooltip = c("site","PDI", "comentaram_prop", "país","usuarios", "Internet"))
+```
 
+- No gráfico G2, as cores dos países no gráfico encontram-se sem delimitação. Isso gera dificuldade de visualização, como também para encontrar informações a respeito de determinados países que se sobrepõem a outros, como Marrocos (StackOverflow) e Egito (SUperUser), ambos com PDI valor 70. 
+```{r echo=TRUE,fig.height=5, fig.width=9}
+p2<- dados %>% na.omit() %>%
+    ggplot(aes(x = reorder(PDI, comentaram_prop), y = comentaram_prop,
+               site = site, PDI=PDI,
+               colour = six_regions,  país = country,
+               usuarios=usuarios, size = Internet))+
+    geom_point()+
+    labs(title = "G2 - Comentários realizados entre países", 
+         x = "PDI (Índice das Distâncias de Poder)", 
+         y = "Proporção de comentários dos países", 
+         colour = "Continentes (cores)/", 
+         size = "Acesso à Internet (tamanho)") +
+    theme(legend.text = element_text(size = 10),axis.text.x = element_text(angle = 90, hjust = 1))
+  
+ggplotly(p2, tooltip = c("site","PDI", "comentaram_prop", "país","usuarios", "Internet"))
+```
+- O Gráfico G3 apresenta as informações separadas por cada país. Apesar de mostrar o continente a que àquele país pertence, nós, seres humanos, não conseguimos distinguir mais que 6 ou 9 cores, tornando a visualização difícil de ser analisada. 
+```{r echo=TRUE,fig.height=5, fig.width=9}
+p3<- dados %>% na.omit() %>%
+    ggplot(aes(x = reorder(PDI, comentaram_prop), y = comentaram_prop, 
+               fill = country,  continentes = six_regions, size = Internet, 
+               site = site, usuarios=usuarios))+
+    geom_point(alpha=0.7, color="black", stroke=0.3)+
+    labs(title = "G3 - Comentários realizados entre países", 
+         x = "PDI (Índice das Distâncias de Poder)", 
+         y = "Proporção de comentários dos países", 
+         fill = "Países (cores)/", 
+         size = "Acesso à Internet (tamanho)") +
+    theme(legend.text = element_text(size = 10),axis.text.x = element_text(angle = 90, hjust = 1))
+  
+ggplotly(p3, tooltip = c("site","PDI", "comentaram_prop", "continentes", "country","usuarios", "Internet"))
+```
+
+- O gráfico G4 apresenta novamente as informações separadas por cada país (cores) e os continentes pelo formato, além de não estarem delimitados em relação as cores. Novamente o mesmo problema do G3, com o agravante de ter que verificar os continentes seguindo uma informação a mais (formas), sem relacionar com a variável Internet. 
+```{r echo=TRUE,fig.height=5, fig.width=9}
+p4<- dados %>% 
+    #filter(site == "StackOverflow") %>%
+    ggplot(aes(x = reorder(PDI, comentaram_prop), y = comentaram_prop, color = country, shape = six_regions, net = Internet, usu = usuarios)) +       
+    geom_point() +
+    labs(title = "G4 - Relação de comentários entre países", x = "PDI (Índice de Distância de Poder)", y = "Proporção de comentários entre países") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggplotly(p4, tooltip = c("PDI", "comentaram_prop", "net","usu", "country"))
+```
+
+- O gráfico G5 não exibe legenda, embora as informações estejam dentro dos quadros dinâmicos em cada dado no gráfico. A falta de cores para diferenciar as informações é o agravante desse gráfico. Uma vez que existem muitas categorias a serem verificadas, é importante que hajam cores para destacar as informações que possam ajudar na análise.   
+```{r echo=TRUE,fig.height=5, fig.width=8}
+
+p5<- dados %>% na.omit() %>%
+    ggplot(aes(x = reorder(PDI, comentaram_prop), y = comentaram_prop,
+               site = site, PDI=PDI,
+               color = six_regions,  país = country,
+               usuarios=usuarios, size = Internet))+
+    geom_point(alpha=0.7, color="black", stroke=0.3)+
+    labs(title = "G5 - Comentários realizados entre países", 
+         x = "PDI (Índice das Distâncias de Poder)", 
+         y = "Proporção de comentários dos países") +
+    theme(legend.text = element_text(size = 10), axis.text.x = element_text(angle = 90, hjust = 1))
+  
+ggplotly(p5, tooltip = c("site", "comentaram_prop", "PDI", "país","usuarios", "Internet"))
+```
