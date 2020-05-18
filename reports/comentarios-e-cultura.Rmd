@@ -49,7 +49,7 @@ glimpse(dados)
 ## Utilização do gráfico interativo com ggplotly()
 
 - Para visualização das informações dos gráficos a seguir, foi utilizada a bilbioteca plotly com o ggplotly() que trasnforma qualquer ggplot2 em gráficos interativos. 
-Ao passar o mouse pelos dados do gráfico, as informações são reveladas. No canto superior direito, apresenta-se um menu interativo, onde é possível salvar o gráfico em .png, aplicar zoom em uma determinada área, selecionar uma área determinada do gráfico, dentre outras opções. Dando clique duplo em algum ítem da legenda, é possível ocultar ou revelar informações a respeito daquele ítem específico.
+Ao passar o mouse pelos dados do gráfico, as informações são reveladas. No canto superior direito, apresenta-se um menu interativo, onde é possível salvar o gráfico em .png, aplicar zoom em uma determinada área, selecionar uma área determinada do gráfico, dentre outras opções. Dando clique duplo em algum ítem da legenda, é possível ocultar ou revelar informações a respeito daquele ítem específico
 
 # Questão 1
 Estamos interessados na relação entre quanto as pessoas de diferentes países comentam em questões dos outros. A proporção das pessoas do país que comentou nas questões de outros está medido na variável `comentaram_prop`. 
