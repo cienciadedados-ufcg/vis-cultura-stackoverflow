@@ -35,11 +35,8 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.
 
 ## Examinando essa relação
-Analisando a questão acima, é solicitado a relação entre quatro variáveis: PDI, comentaram_prop, Internet e usuarios. Para isso, 
-a melhor forma de integrar todas elas é a partir de um gŕafico em
-que no eixo X tenha a variável PDI e no eixo Y a variável comentam_prop.
-A partir daí, podemos verificar como essas duas grandezas se relacionam.
-Também incluiremos as variáveis Internet e quantidade de usuários.
+Analisando a questão acima, é solicitada a investigação da relação entre quatro variáveis: PDI, comentaram_prop, Internet e usuarios.
+Para isso, a melhor forma de integrar todas elas é a partir de um gŕafico em que no eixo X tenha a variável PDI e no eixo Y a variável comentam_prop. A partir daí, podemos verificar como essas duas grandezas se relacionam. Também incluiremos as variáveis Internet e quantidade de usuários.
 
  ```{r}
 dados %>%
@@ -55,8 +52,8 @@ dados %>%
 
 Pela análise do gráfico acima, percebemos que, de forma geral, existe uma relação inversamente proporcional entre a PDI e a comentaram_prop.
 Ou seja, países que possuem as relações hierárquicas menos engessadas,
-com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades, comentam menos. Também é possível observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com
-populações menores comentam menos do que países com populações maiores.
+com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades e a hierarquia, comentam menos.Também é possível 
+observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com populações menores comentam menos do que países com populações maiores.
 
 ## Outras formas de ver
 
@@ -70,6 +67,10 @@ dados %>%
     ggplot(aes(x = PDI, y = comentaram_prop)) +
     geom_point()
 ```
+Pela análise do gráfico acima (PDI x comentaram_prop), fica evidente a relação inversa entre as
+variáveis PDI e comentaram_prop, ou seja, usuários de países com menores PDI comentam mais do que os usuários de países com maiores
+PDI.
+
 
 O gráfico abaixo mostra a relação entre as variáveis Internet e comentaram_prop.
 ```{r}
@@ -77,6 +78,11 @@ dados %>%
     ggplot(aes(x = Internet, y = comentaram_prop)) +
     geom_point()
 ```
+No gráfico acima (Internet x comentaram_prop), é possível visualizar
+uma relação linear entre a utilização da Internet pelos usuários e a 
+quantidade de comentários. Ou seja, países que possuem usuários com
+mais acesso à internet comentam mais do que os usuários de países com
+menos acesso à internet.
 
 O gráfico abaixo mostra a relação entre usuários e comentaram_prop.
 ```{r}
@@ -84,6 +90,11 @@ dados %>%
     ggplot(aes(x = log10(usuarios), y = comentaram_prop)) +
     geom_point()
 ```
+Pela análise do gráfico acima (Usuários x comentaram_prop) é possível
+visualizar uma relação direta entre a quantidade de usuários de um 
+país e a quantidade de comentários, ou seja, quanto mais usuários
+um país possui, mais comentários são feitos para usuários de outros países.
+
 
 O gráfico abaixo mostra a relação entre Internet e PDI.
 ```{r}
@@ -91,6 +102,11 @@ dados %>%
     ggplot(aes(x = Internet, y = PDI)) +
     geom_point()
 ```
+Pela análise do gráfico acima (Internet x PDI) é possível verificar uma
+relação inversa entre a quantidade de usuários com acesso à internet e
+o valor do PDI. É possível constatar que  países com mais acesso à internet possuem menores PDI, ou seja, aceitam menos as desigualdades
+sociais e as hierarquias na sociedade.
+
 
 O gráfico abaixo mostra a relação entre Internet e Usuários .
 ```{r}
@@ -98,6 +114,7 @@ dados %>%
     ggplot(aes(x = Internet, y = log10(usuarios))) +
     geom_point()
 ```
+Pela análise do gráfico acima (Internet x Usuários) não é possível encontrar um padrão nesses dados.
 
 Bônus
 Inclua o continente dos países (`six_regions`) na visualização.
