@@ -1,5 +1,7 @@
 ---
-title: "Comentários e cultura"
+title: "Comentários e cultura - Lab 3.2 - FPCC2 "
+author: "Nisston Moraes Tavares de Melo - Matrícula: 0120015808-15D"
+date: "16 de maio de 2020"
 output:
     html_document:
     df_print: paged
@@ -10,7 +12,7 @@ theme: sandstone
 library(tidyverse)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
+source(here::here("code/import_data.R"))
 theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
@@ -18,7 +20,7 @@ knitr::opts_chunk$set(tidy = FALSE,
                       fig.height = 5)
 ```
 
-```{r read}
+```{r read, echo=FALSE}
 dados = read_csv(
     here::here("data/participation-per-country.csv"),
     col_types = cols(
@@ -44,11 +46,116 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 
 Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
 
+```{r echo=TRUE}
+
+dados %>%
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point(alpha = 0.5) +
+    scale_color_distiller(palette= "Blues") +
+    scale_size_continuous(range = c(1, 10)) +
+    labs(color = "Internet (%)", size = "Usuários", x = "Comentários", y = "PDI - Índice de Distância de Poder", title = "Gráifco da relação entre as variáveis do contexto")
+
+```
+
+
+Diante do gráfico acima, é possível representar as variáveis: comentaram_prop, PDI, Internet e usuarios. No eixo "X" colocamos os comentários feitos por um país e no eixo "Y" a variável PDI, e nesse relacionamento podemos observar a relação entre a proporção de comentários feitos por um país e a proporção como as pessoas lidam com às desigualdades,conseguimos identificar uma relação linear negativa fraca entre os pontos. Quando mais à direita do eixo "X", ou seja, quanto mais aumenta a proporção de comentários, as pessoas são menos tolerantes às desigualdades, ou seja, mais baixo fica os valores no eixo "Y".
+É possível também verificar que os países com maior acesso à internet também apresentam maior participação nos comentários, e que lidam bem com às desigualdades. Em contrapartida, os países com um número menor de acesso à internet apresentam uma baixa participação nos comentários e são menos tolerantes às desigualdades.
+
+
 ## Outras formas de ver
 
-Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
+Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima.
+
+### Visualização - 1
+
+```{r, echo=TRUE}
+dados %>%
+    ggplot(aes(x = usuarios, y = PDI, color = Internet, size = comentaram_prop)) +
+    geom_point(alpha = 0.5) +
+    scale_color_distiller(palette="Blues") +
+    labs(color = "Internet (%)", size = "Comentários", x = "Usuários", y = "PDI - Índice de Distância de Poder", title = "Gráifco-1 da relação entre as variáveis do contexto")
+
+```
+
+
+Na primeira visualização, foi feito a troca da variável comentários do eixo "X" e colocamos a variável Usuário. E as outras variáveis (Comentários e Internet) colocamos para ser representados pelo tamanho e intensidade de cor. Com isso fica difícil uma interpretação tanto no seu relacionamento entre Usuário e PDI como na forma de uma possível curva, se é linear negativa ou positiva e se é forte ou fraca.
+
+### Visualização - 2
+```{r, echo=TRUE}
+dados %>%
+    na.omit() %>% 
+    ggplot(aes(x = comentaram_prop, y = PDI, color = usuarios, size = Internet)) +
+    geom_point(alpha = 0.5) +
+    scale_color_distiller(palette="Blues") +
+    labs(color = "Usuários", size = "Internet (%)", x = "Comentários", y = "PDI - Índice de Distância de Poder", title = "Gráifco-2 da relação entre as variáveis do contexto")
+
+```
+
+
+Na segunda visualização, permaneceu as variáveis para "X" e "Y", ou seja, Comentários e PDI, respectivamente, mas foi feito a troca do tamanho dos pontos e da intensidade da cor, onde era Usuários e Internet (%), respectivamente, passou para Internet (%) e Usuárioa. Diante deste contexto fica complicado identificar o relacionamento entre o número de usuário que é representado pela intensidade da cor e pelo uso da internet que é representado pelo tamanho, neste último podemos verificar que o tamanho entre eles é muito similar, não apresentando um visão sobre a relação entre usuário e acesso a internet que possa fazer uma análise.
+
+### Visualização - 3
+```{r, echo=TRUE}
+
+dados %>%
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios, label = usuarios)) +
+    geom_point(alpha = 0.5) +
+    geom_text() +
+    scale_color_distiller(palette="Blues") +
+    scale_size_continuous(range = c(1, 10)) +
+    labs(color = "Internet (%)", size = "Usuários", x = "Comentários", y = "PDI - Índice de Distância de Poder", title = "Gráifco-3 da relação entre as variáveis do contexto")
+
+```
+
+
+Na terceira visualização, colocamos as variáveis nas mesmas posições, porém colocamos o parâmetro label ativo para informar o número de usuários "label = usuario" onde a representação do número de usuário dentro dos ponto coloca em cheque toda a visualização do gráfico, tanto para visualizar o seu tamanho como a intensidade das cores, dificultanto assim uma análise do relacionamento entre essas variáveis (usuários e internet) e as demais.
+
+
+### Visualização - 4
+```{r, echo=TRUE}
+dados %>%
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point(alpha = 0.5) +
+    scale_color_distiller(palette="Blues") +
+    scale_x_discrete() +
+    scale_size_continuous(range = c(1, 10)) +
+    labs(color = "Internet (%)", size = "Usuários", x = "Comentários", y = "PDI - Índice de Distância de Poder", title = "Gráifco-4 da relação entre as variáveis do contexto")
+
+```
+
+
+Na quarta visualização, colocamos as variáveis nas mesmas posições, porém foi configurado o parâmetro que defini o intervalo no eixo "X" entre 1 e 10, restringindo o campo de visão dos dados, prejudicando toda a análise e possível interpretação entre as variáveis dispostas no gráfico.
+
+
+
+### Visualização - 5
+```{r, echo=TRUE}
+dados %>%
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point(alpha = 0.5) +
+    scale_color_distiller(palette="Blues") +
+    labs(color = "Internet (%)", size = "Usuários", x = "Comentários", y = "PDI - Índice de Distância de Poder", title = "Gráifco-5 da relação entre as variáveis do contexto")
+
+```
+
+
+Na quinta visualização, colocamos as variáveis nas mesmas posições, porém não foi configurado de maneira correta dois recursos: o da palleta e o tamanho da área de plotagem referente aos usário. Assim é possível verificar a dificuldade em relacionar o número de usuário com o acesso a internet e como a internet poderia influenciar no número de comentários.
+
+
 
 ## Bônus
 
 Inclua o continente dos países (`six_regions`) na visualização.
 
+```{r, echo=TRUE}
+dados %>%
+    na.omit() %>% 
+    ggplot(aes(x = comentaram_prop, y = PDI, color = Internet, size = usuarios)) +
+    geom_point(alpha = 0.5) +
+    facet_wrap(six_regions~., ncol = 2) +
+    scale_color_distiller(palette="YlGnBu") +
+    scale_size_continuous(range = c(1, 10)) +
+    labs(color = "Internet (%)", size = "Usuários", x = "Comentários", y = "PDI - Índice de Distância de Poder", title = "Gráifco por continente")
+```
+
+Nesta visualização, todas as variáveis estão nas mesmas posições, porém foi configurado a visualização em duas colunas por continentes. Assim é possível verificar algum relacionamento entre as variáveis por continente.
