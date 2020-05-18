@@ -1,3 +1,15 @@
+---
+title: "Ramon Nóbrega-comentarios-e-cultura"
+author: "Ramon Nóbrega"
+date: "18 de maio de 2020"
+output:
+    html_document:
+    df_print: paged
+theme: sandstone
+---
+    
+    Ramon Nóbrega (Aluno especial- FPCC2 - 2020.1)
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(here)
@@ -8,6 +20,11 @@ theme_set(theme_bw())
 knitr::opts_chunk$set(tidy = FALSE,
                       fig.width = 6,
                       fig.height = 5)
+
+library(extrafont)
+# Só é preciso fazer isso uma única vez
+extrafont::font_import()
+extrafont::loadfonts()
 ```
 
 ```{r read}
@@ -44,77 +61,102 @@ dados %>%
         x = PDI,
         y = comentaram_prop,
         color = Internet,
-        size = log10(usuarios)
+        size = log10(usuarios),
+        
     )) +
-    geom_point(alpha = .6)
+    geom_point(alpha = .6)+
+    par(family = "Georgia")+
+    theme(plot.title = element_text(size = 12,face="bold",family="Times new Roman")) +
+    labs(
+        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
+        position="plot",
+        y = "Porcentagem de usuários que comentam",
+        x = "Índice de Distância de Poder (PDI)" 
+    )
  
 ```
 
 Pela análise do gráfico acima, percebemos que, de forma geral, existe uma relação inversamente proporcional entre a PDI e a comentaram_prop.
 Ou seja, países que possuem as relações hierárquicas menos engessadas,
-com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades e a hierarquia, comentam menos.Também é possível 
-observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com populações menores comentam menos do que países com populações maiores.
+com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades e a hierarquia, comentam menos.Também é possível observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com populações menores comentam menos do que países com populações maiores.
 
 ## Outras formas de ver
 
 Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima.
 
+Artigo tomando como referência:
+6 dicas para a visualização de dados disponível em
+https://www.ibpad.com.br/blog/analise-de-dados/6-dicas-para-visualizacao-de-dados/
 
-O gráfico abaixo mostra a relação entre as variáveis PDI e comentaram_prop.
 
-```{r}
+**ANÁLISE DO GRÁFICO 1*
+A primeira análise que faremos é baseada na **utilização de fontes legíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usar num gráfico. Lembre-se, é uma narrativa, não é arte. O segundo mostra uma fonte mais apropriada para os nossos fins.
+
+ ```{r}
 dados %>%
-    ggplot(aes(x = PDI, y = comentaram_prop)) +
-    geom_point()
+    ggplot(aes(
+        x = PDI,
+        y = comentaram_prop,
+        color = Internet,
+        size = log10(usuarios)
+    )) +
+    geom_point(alpha = .6)+
+    theme(plot.title = element_text(size = 12,face="bold",family="Lobster")) +
+    labs(
+        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
+        position="plot",
+        y = "Porcentagem de usuários que comentam",
+        x = "Índice de Distância de Poder (PDI)" 
+    )
+ 
 ```
-Pela análise do gráfico acima (PDI x comentaram_prop), fica evidente a relação inversa entre as
-variáveis PDI e comentaram_prop, ou seja, usuários de países com menores PDI comentam mais do que os usuários de países com maiores
-PDI.
 
+Análise de gŕafico 2
+A segunda análise que faremos é baseada no **excesso de cores em um gráfico**. Estudos mostram que o excesso de cor pode confundir o visualizador.
 
-O gráfico abaixo mostra a relação entre as variáveis Internet e comentaram_prop.
-```{r}
+ ```{r}
 dados %>%
-    ggplot(aes(x = Internet, y = comentaram_prop)) +
-    geom_point()
+    ggplot(aes(
+        x = PDI,
+        y = comentaram_prop,
+        color = Internet,
+        size = log10(usuarios)
+    )) +
+    geom_point(alpha = .6)+
+    scale_colour_gradientn(colours=rainbow(4)) +
+    theme(plot.title = element_text(size = 10,face="bold")) +
+    labs(
+        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
+        position="plot",
+        y = "Porcentagem de usuários que comentam",
+        x = "Índice de Distância de Poder (PDI)" 
+    )
+ 
 ```
-No gráfico acima (Internet x comentaram_prop), é possível visualizar
-uma relação linear entre a utilização da Internet pelos usuários e a 
-quantidade de comentários. Ou seja, países que possuem usuários com
-mais acesso à internet comentam mais do que os usuários de países com
-menos acesso à internet.
 
-O gráfico abaixo mostra a relação entre usuários e comentaram_prop.
-```{r}
+Análise de gŕafico 3
+A terceira análise que faremos é baseada no **escolha das variáveis**. 
+
+ ```{r}
 dados %>%
-    ggplot(aes(x = log10(usuarios), y = comentaram_prop)) +
-    geom_point()
+    ggplot(aes(
+        x = PDI,
+        y = comentaram_prop,
+        color = log10(usuarios),
+        size = Internet
+    )) +
+    geom_point(alpha = .6)+
+    theme(plot.title = element_text(size = 10,face="bold")) +
+    labs(
+        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
+        position="plot",
+        y = "Porcentagem de usuários que comentam",
+        x = "Índice de Distância de Poder (PDI)" 
+    )
+ 
 ```
-Pela análise do gráfico acima (Usuários x comentaram_prop) é possível
-visualizar uma relação direta entre a quantidade de usuários de um 
-país e a quantidade de comentários, ou seja, quanto mais usuários
-um país possui, mais comentários são feitos para usuários de outros países.
 
 
-O gráfico abaixo mostra a relação entre Internet e PDI.
-```{r}
-dados %>%
-    ggplot(aes(x = Internet, y = PDI)) +
-    geom_point()
-```
-Pela análise do gráfico acima (Internet x PDI) é possível verificar uma
-relação inversa entre a quantidade de usuários com acesso à internet e
-o valor do PDI. É possível constatar que  países com mais acesso à internet possuem menores PDI, ou seja, aceitam menos as desigualdades
-sociais e as hierarquias na sociedade.
-
-
-O gráfico abaixo mostra a relação entre Internet e Usuários .
-```{r}
-dados %>%
-    ggplot(aes(x = Internet, y = log10(usuarios))) +
-    geom_point()
-```
-Pela análise do gráfico acima (Internet x Usuários) não é possível encontrar um padrão nesses dados.
 
 Bônus
 Inclua o continente dos países (`six_regions`) na visualização.
