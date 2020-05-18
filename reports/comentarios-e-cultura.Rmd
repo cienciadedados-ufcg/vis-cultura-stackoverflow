@@ -63,7 +63,6 @@ Na visualização acima foi analisada a Proporção de comentários em outros pa
 Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
 
 ## Bônus
-
 Inclua o continente dos países (`six_regions`) na visualização.
 
 ### Gráfico 1 - Problema de cor
