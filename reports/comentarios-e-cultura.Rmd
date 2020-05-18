@@ -116,4 +116,5 @@ dados %>%
 ```
 A partir da análise do gráfico acima, percebemos que os maiores índices
 de comentários estão nos países da Europa.
+Análise a ser finalizada
  
