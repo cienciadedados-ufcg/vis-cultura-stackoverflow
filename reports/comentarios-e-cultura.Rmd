@@ -32,11 +32,14 @@ Estamos interessados na relação entre quanto as pessoas de diferentes países 
 
 Considerando essa variável, queremos examinar a relação entre ela e o quão hierárquicas são as relações em um país (`PDI`). Queremos também levar em conta o quanto as pessoas daquele país têm acesso à Internet (`Internet`) e qual o tamanho da base de dados que detectamos daquele país (`usuarios`).
 
+Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.
+
 ## Examinando essa relação
 Analisando a questão acima, é solicitado a relação entre quatro variáveis: PDI, comentaram_prop, Internet e usuarios. Para isso, 
 a melhor forma de integrar todas elas é a partir de um gŕafico em
 que no eixo X tenha a variável PDI e no eixo Y a variável comentam_prop.
 A partir daí, podemos verificar como essas duas grandezas se relacionam.
+Também incluiremos as variáveis Internet e quantidade de usuários.
 
  ```{r}
 dados %>%
@@ -47,26 +50,70 @@ dados %>%
         size = log10(usuarios)
     )) +
     geom_point(alpha = .6)
-
-
-dados %>%
-    ggplot(aes(
-        x = PDI,
-        y = comentaram_prop,
-        color = Internet,
-        size = log10(usuarios)
-    )) +
-    geom_point(alpha = .6) +
-    facet_grid(site ~ ., scales = "free_y")
+ 
 ```
-Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.
+
+Pela análise do gráfico acima, percebemos que, de forma geral, existe uma relação inversamente proporcional entre a PDI e a comentaram_prop.
+Ou seja, países que possuem as relações hierárquicas menos engessadas,
+com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades, comentam menos. Também é possível observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com
+populações menores comentam menos do que países com populações maiores.
 
 ## Outras formas de ver
 
 Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima.
 
-Bônus
 
+O gráfico abaixo mostra a relação entre as variáveis PDI e comentaram_prop.
+
+```{r}
+dados %>%
+    ggplot(aes(x = PDI, y = comentaram_prop)) +
+    geom_point()
+```
+
+O gráfico abaixo mostra a relação entre as variáveis Internet e comentaram_prop.
+```{r}
+dados %>%
+    ggplot(aes(x = Internet, y = comentaram_prop)) +
+    geom_point()
+```
+
+O gráfico abaixo mostra a relação entre usuários e comentaram_prop.
+```{r}
+dados %>%
+    ggplot(aes(x = log10(usuarios), y = comentaram_prop)) +
+    geom_point()
+```
+
+O gráfico abaixo mostra a relação entre Internet e PDI.
+```{r}
+dados %>%
+    ggplot(aes(x = Internet, y = PDI)) +
+    geom_point()
+```
+
+O gráfico abaixo mostra a relação entre Internet e Usuários .
+```{r}
+dados %>%
+    ggplot(aes(x = Internet, y = log10(usuarios))) +
+    geom_point()
+```
+
+Bônus
 Inclua o continente dos países (`six_regions`) na visualização.
 
+```{r}
+dados %>%
+    ggplot(aes(
+        x = PDI,
+        y = responderam_prop,
+        size = Internet,
+        color = log10(usuarios)
+    )) +
+    geom_point(alpha = .6) +
+    facet_grid(six_regions ~ ., scales = "free_y")
+
+```
+A partir da análise do gráfico acima, percebemos que os maiores índices
+de comentários estão nos países da Europa.
  
