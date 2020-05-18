@@ -1,8 +1,13 @@
 ---
 title: "Comentários e cultura"
 output:
-    html_document:
+  html_notebook:
+    toc: yes
+    toc_float: yes
+  html_document:
     df_print: paged
+    toc: yes
+    toc_float: yes
 theme: sandstone
 ---
 
@@ -10,7 +15,10 @@ theme: sandstone
 library(tidyverse)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
+library(GGally)
+library(corrr)
+source(here::here("code/import_data.R"))
+source(here::here("code/cormat.R"))
 theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
@@ -44,11 +52,91 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 
 Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
 
+```{r}
+dados %>%
+    select(comentaram_prop,
+           PDI, Internet, usuarios) %>%
+    ggpairs(progress = FALSE, 
+            upper = list(continuous = wrap("cor", method = "kendall", 
+                                           size = 8, color="black")))
+```
+
+No intuito de avaliar a a existência de alguma relação entre as múltiplas variáveis numéricas em questão empregamos a matriz de correlação do pacote GGally. A matriz de correlação nos fornece visualizações tanto em termos de histograma, dispersão e cálculo de métrica de correlação (nesse caso, Kendall) para uma perspectiva mais abrangete de como as variáveis se relacionam. Além disso, esta visualização pode ser aplicada a um número arbitrário de variáveis.
+
+
 ## Outras formas de ver
 
 Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
 
+```{r}
+library(corrplot)
+
+dados %>%
+    select(comentaram_prop,
+           PDI, Internet, usuarios) %>%
+    na.exclude() %>%
+    cor(method= "kendall") -> M
+
+corrplot(M, method = "number", order = "hclust", type="lower")
+```
+
+Apesar de representar todas as variáveis, essa visualização só provê uma representação do valor da métrica de correlação.
+
+```{r}
+
+```
+
+```{r}
+dados %>%
+    na.exclude %>%
+    mutate(Internet = cut(Internet, breaks=c(25, 50, 75, 100)),
+           Internet = as.factor(Internet)) %>%
+    na.exclude %>%
+    ggplot(aes(comentaram_prop, PDI, size=usuarios)) +
+    geom_point() +
+    facet_wrap(~ Internet, labeller = "label_both")
+```
+
+```{r}
+dados %>%
+    select(comentaram_prop,
+           PDI, Internet, usuarios) %>%
+    rquery.cormat(type="upper", graphType="heatmap") -> cormat
+```
+
+Este heatmap provê os valores de correlação na forma de um heatmap. Além da correlação é representado a clusteriação hierárquica. A visualização não provê explicação da escala de cores. Não existe opção para manipular o texto nos axis que é cortado no eixo x.
+
+```{r}
+dados %>%
+    select(comentaram_prop, PDI,
+           Internet, usuarios) %>%
+    graphics::pairs()
+```
+
+A visualização pairs do pacote graphics equivale a uma matriz de gráficos de dispersão.  
+```{r}
+dados %>%
+    select(comentaram_prop, PDI,
+           Internet, usuarios) %>%
+    na.exclude() %>%
+    correlate(method = "spearman")  %>%
+    network_plot(min_cor = 0) 
+
+```
+
+Para valores mais baixos de correlação, abaixo de 0.6, o gráfico de correlation network  fica difícil de ler porque as cores ficam apagadas. Fica aparente no gráfico que a variável usuários é a menos correlata com o resto.  
+
+
 ## Bônus
 
 Inclua o continente dos países (`six_regions`) na visualização.
+
+```{r}
+dados %>%
+    mutate(six_regions = as.factor(six_regions)) %>%
+    ggpairs(progress = FALSE,
+            mapping = aes(color = six_regions),
+            columns = c("comentaram_prop","PDI", "Internet", "usuarios"),
+            upper = list(continuous = wrap("cor", method = "kendall")))
+```
 
