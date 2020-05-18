@@ -33,15 +33,12 @@ Estamos interessados na relação entre quanto as pessoas de diferentes países 
 Considerando essa variável, queremos examinar a relação entre ela e o quão hierárquicas são as relações em um país (`PDI`). Queremos também levar em conta o quanto as pessoas daquele país têm acesso à Internet (`Internet`) e qual o tamanho da base de dados que detectamos daquele país (`usuarios`).
 
 ## Examinando essa relação
+Analisando a questão acima, é solicitado a relação entre quatro variáveis: PDI, comentaram_prop, Internet e usuarios. Para isso, 
+a melhor forma de integrar todas elas é a partir de um gŕafico em
+que no eixo X tenha a variável PDI e no eixo Y a variável comentam_prop.
+A partir daí, podemos verificar como essas duas grandezas se relacionam.
+
  ```{r}
-dados %>%
-    ggplot(aes(x = PDI, y = comentaram_prop)) +
-    geom_point()
-
-dados %>%
-    ggplot(aes(x = PDI, y = comentaram_prop, color = site)) +
-    geom_point()
-
 dados %>%
     ggplot(aes(
         x = PDI,
