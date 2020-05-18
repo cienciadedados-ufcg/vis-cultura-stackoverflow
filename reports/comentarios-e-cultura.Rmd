@@ -67,11 +67,11 @@ dados %>%
     na.omit() %>% 
     ggplot(aes(x = comentaram_prop, y = PDI, color = usuarios, size = Internet)) +
     geom_point(alpha = 0.67) +
-    scale_color_distiller(palette="YlOrRd") +
+    scale_colour_distiller(palette="YlOrRd") +
     labs(x = "Proporção de comentários", y = "PDI", title = "Relação entre a proporção de comentários\ne o quão hierárquicas são as relações em um país", color = "Quantidade de Usuários", size = "Acesso à Internet")
 ```
 
-Nessa primeira visualização acima, foi utilizado o tamanho do ponto para representar o quanto as pessoas de um país tem acesso á Internet e a cor para o número de usuários da base de dados, e podemos ver que, fica bem difícil de analisar essas variáveis na relação entre a proporção de comentários dos usuários e as relações hierárquicas dos países pois a distribuição do pontos do número de usuários da bases de dados tem valores bem próximos.
+Nessa primeira visualização acima, foi utilizado o tamanho do ponto para representar o quanto as pessoas de um país tem acesso á Internet e a cor para o número de usuários da base de dados, e podemos ver que, fica bem difícil de analisar essas variáveis na relação entre a proporção de comentários dos usuários e as relações hierárquicas dos países pois a distribuição do número de usuários tem muitos valores pequenos.
 
 ```{r}
 dados %>% 
