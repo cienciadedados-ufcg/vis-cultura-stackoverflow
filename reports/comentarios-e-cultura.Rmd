@@ -8,9 +8,10 @@ theme: sandstone
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(ggplot2)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
+source(here::here("code/import_data.R"))
 theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
@@ -39,10 +40,23 @@ glimpse(dados)
 Estamos interessados na relação entre quanto as pessoas de diferentes países comentam em questões dos outros. A proporção das pessoas do país que comentou nas questões de outros está medido na variável `comentaram_prop`. 
 
 Considerando essa variável, queremos examinar a relação entre ela e o quão hierárquicas são as relações em um país (`PDI`). Queremos também levar em conta o quanto as pessoas daquele país têm acesso à Internet (`Internet`) e qual o tamanho da base de dados que detectamos daquele país (`usuarios`). 
+ 
 
 ## Examinando essa relação
 
 Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
+
+```{r}
+dados %>% 
+    na.omit() %>% 
+    ggplot(aes(x = PDI, y = comentaram_prop, colour = six_regions, size = Internet)) +
+    geom_point(alpha = .7) +
+    scale_color_brewer(palette = "Set1") +
+    labs(x = "PDI - Índice de Distância de Poder", y = "Proporção de comentarios em outros países")
+```
+ 
+  
+Na visualização acima foi analisada a Proporção de comentários em outros países pelo PDI. Nela, é possível também observar o quanto as pessoas de diferentes regiões acessam à internet. Para uma melhor visualização, cor e tamanho destacam e diferenciam essas informações, tornando possível ter uma rápida análise visual do todo.
 
 ## Outras formas de ver
 
@@ -52,3 +66,76 @@ Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pont
 
 Inclua o continente dos países (`six_regions`) na visualização.
 
+### Gráfico 1 - Problema de cor
+```{r}
+dados %>% 
+    na.omit() %>% 
+    ggplot(aes(x = PDI, y = comentaram_prop, colour = six_regions, size = Internet)) +
+    geom_point(alpha = .7) +
+    scale_color_brewer(palette = "Greens") +
+    labs(x = "PDI - Índice de Distância de Poder", y = "Proporção de comentarios em outros países")
+```
+    
+No Gráfico 1, observa-se que o uso de uma única cor em direfentes tonalidades dificulta a diferenciação de algumas regiões que possuem tonalidades muito próximas. O olho humano muitas vezes não consegue distinguir com clareza cores muito próximas ou diferentes tonalidades de uma mesma cor.
+ 
+
+### Gráfico 2 - Problema de tamanho
+```{r}
+dados %>% 
+    na.omit() %>% 
+    ggplot(aes(x = PDI, y = comentaram_prop, colour = six_regions)) +
+    geom_point(alpha = .7) +
+    scale_color_brewer(palette = "Set1") +
+    labs(x = "PDI - Índice de Distância de Poder", y = "Proporção de comentarios em outros países")
+```
+  
+No Gráfico 2, observa-se que a ausência da escala, além de eliminar a variável internet, dificulta um pouco na identificação das diferentes regiões, pois o tamanho impacta na nossa capacidade de distingir as cores e, consequentemente direfenciar as regiões. 
+
+
+### Gráfico 3 - Problema de Forma
+```{r}
+dados %>% 
+    na.omit() %>% 
+    ggplot(aes(x = PDI, y = comentaram_prop, shape = six_regions, size = Internet)) +
+    geom_point(alpha = .7) +
+    scale_color_brewer(palette = "Dark2") +
+    labs(x = "PDI - Índice de Distância de Poder", y = "Proporção de comentarios em outros países")
+```
+
+No Gráfico 3, observa-se que apenas o uso da forma como elemento diferenciado não exerce muito bem essa função. Uma forma melhor de fazer isso, por exemplo, é o uso da forma assocido a cor, o que tornaria essa diferenciação mais evidente.E em alguns pontos, observa-se também que a sobreposição de vários elementos com a mesma cor causa prejuizo a compreesão da informação sobreposta.
+ 
+ 
+### Gráfico 4 - Problema de sobreposição de informação 
+```{r}
+dados %>% 
+    na.omit() %>% 
+    ggplot(aes(x = PDI, y = comentaram_prop, colour = six_regions, size = Internet)) +
+    geom_point() +
+    scale_color_brewer(palette = "Set1") +
+    labs(x = "PDI - Índice de Distância de Poder", y = "Proporção de comentarios em outros países")
+```
+ 
+No Gráfico 4, observa-se que quando há uma sobreposição de informações o ajuste de preencimento da cor (transparência/opacidade) é fundamental, pois, caso contrário, não é possível visualizar as camadas de informação que estão sobrepostas. 
+
+
+
+### Gráfico 5 - Problema de contexto
+
+```{r}
+dados %>% 
+    na.omit() %>% 
+    ggplot(aes(x = PDI, y = comentaram_prop, colour = six_regions, size = Internet)) +
+    geom_jitter(width = .1, color = "grey", alpha = .5) +
+    geom_point(data = dados %>% filter(six_regions == 'america'), 
+               color = "red", 
+               size = 2) +
+    scale_color_brewer(palette = "Set1") +
+    labs(x = "PDI - Índice de Distância de Poder", y = "Proporção de comentarios em outros países")
+```
+ 
+No Gráfico 5, observa-se que ao destacar uma região em específico perde-se o contexto das demais, pois fica difícil identicar e diferenciar as informações referentes as demais regiões.
+  
+
+
+ 
+  
