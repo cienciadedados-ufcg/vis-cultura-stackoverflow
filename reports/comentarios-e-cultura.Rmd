@@ -129,5 +129,5 @@ dados %>%
     labs(x = "Proporção de comentários", y = "PDI", title = "Relação entre a proporção de comentários\ne o quão hierárquicas são as relações em um país", color = "Acesso à Internet", size = "Quantidade de Usuários")
 ```
 
-
 A visualização acima mostra uma forma de analisar a relação entre as variáveis pelo continente dos países.
+

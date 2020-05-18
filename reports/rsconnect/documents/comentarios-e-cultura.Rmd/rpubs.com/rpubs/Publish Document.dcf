@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/616196/723105db47e44d50830393b94d14774e
+bundleId: https://api.rpubs.com/api/v1/document/616196/723105db47e44d50830393b94d14774e
+url: http://rpubs.com/alicesilva/616196
+when: 1589813093.92357
