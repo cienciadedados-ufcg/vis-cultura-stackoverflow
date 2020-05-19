@@ -200,11 +200,17 @@ grafico5 + theme(legend.position = "top",
                                      lineheight=.5,
                                      family="Times",
                                      face="bold.italic",
-                                     colour="orange"),
+                                     colour="yellow"),
            axis.text.x = element_text(size=rel(1.1),
                                       family="Courier",
                                       face="bold",
-                                      color="yellow"))
+                                      color="yellow"),
+           axis.text.y = element_text(size=rel(1.1),
+                                      family="Courier",
+                                      face="bold",
+                                      color="yellow")
+           
+           )
 
 grafico5
 
