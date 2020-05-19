@@ -170,12 +170,35 @@ grafico3<-dados %>%
 ```
 
 **ANÁLISE DO GRÁFICO 4**
-A quarta análise que faremos é baseada na **utilização de fontes ilegíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usa-la num gráfico. Lembre-se, é uma narrativa, não é arte. 
+A quarta análise que faremos é baseada na **utilização de tamanho equivocado de escala para o elemento size da variável Internet**. Perceba que a partir dessa escolha, fica impossível diferenciar o acesso
+à internet entre os países, comprometendo também a visualização da quantidade de 
+usuários por pais, além de dificultar a visualização da relação entre PDI X comentaram_prop
+ ```{r}
+grafico4<-dados %>%
+    ggplot(aes(
+        x = PDI,
+        y = comentaram_prop,
+        color = Internet,
+        size = log10(usuarios),
+        
+    )) +
+    geom_point(alpha = .6)+
+    scale_size_continuous(range = c(10,20)) +
+    theme_light()+
+    theme(plot.title = element_text(size = 10,face="bold",family="Times new Roman")) +
+    labs(
+        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
+        position="plot",
+        x = "Índice de Distância de Poder (PDI)" ,
+        y = "Porcentagem de usuários que comentam"
+    )
+grafico4
 
+```
 
 
 **ANÁLISE DO GRÁFICO 5**
-A quinta análise que faremos é baseada na **utilização de cores erradas para títulos e legendas, além do posicionamento ruim da legenda**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. 
+A quinta análise que faremos é baseada na **utilização de cores inapropridas para títulos e legendas, além do posicionamento ruim da legenda**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. 
 
 ```{r}
 
@@ -259,9 +282,30 @@ grafico5 + theme(legend.position = "right",
                                       face="bold")
            
            )
-
-
 ``` 
+Inicialmente foi considerado o gráfico acima, entretanto, ficou muito difícil
+a visualização já que os elementos de usuário e internet se sobreponham. Daí, foi
+criado o gráfico a seguir.
+
+```{r}
+dados %>% 
+    filter(!is.na(six_regions)) %>%
+    ggplot(aes(
+        x = PDI,
+        y = comentaram_prop,
+        size = Internet,
+        color = log10(usuarios)
+    )) +
+    facet_wrap(~ six_regions) +
+    geom_point(alpha = .7) +
+    theme(plot.title = element_text(size = 10, face = "bold")) +
+    labs(
+        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
+        subtitle = "Por continente",
+        y = "Porcentagem de usuários que comentam",
+        x = "PDI" 
+    )
+```
 
 
 A partir da análise do gráfico acima, percebemos que os maiores índices
