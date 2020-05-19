@@ -1,11 +1,12 @@
 ---
 title: "Comentários e cultura"
+author: "José Benardi de Souza Nunes"
 output:
-  html_notebook:
-    toc: yes
-    toc_float: yes
   html_document:
     df_print: paged
+    toc: yes
+    toc_float: yes
+  html_notebook:
     toc: yes
     toc_float: yes
 theme: sandstone
@@ -77,31 +78,13 @@ dados %>%
     na.exclude() %>%
     cor(method= "kendall") -> M
 
-corrplot(M, method = "number", order = "hclust", type="lower")
+corrplot(M, method = "circle", order = "hclust")
 ```
 
-Apesar de representar todas as variáveis, essa visualização só provê uma representação do valor da métrica de correlação.
+Apesar de representar todas as variáveis, esta visualização só provê uma representação do valor da métrica de correlação.
 
 ```{r}
 
-```
-
-```{r}
-dados %>%
-    na.exclude %>%
-    mutate(Internet = cut(Internet, breaks=c(25, 50, 75, 100)),
-           Internet = as.factor(Internet)) %>%
-    na.exclude %>%
-    ggplot(aes(comentaram_prop, PDI, size=usuarios)) +
-    geom_point() +
-    facet_wrap(~ Internet, labeller = "label_both")
-```
-
-```{r}
-dados %>%
-    select(comentaram_prop,
-           PDI, Internet, usuarios) %>%
-    rquery.cormat(type="upper", graphType="heatmap") -> cormat
 ```
 
 Este heatmap provê os valores de correlação na forma de um heatmap. Além da correlação é representado a clusteriação hierárquica. A visualização não provê explicação da escala de cores. Não existe opção para manipular o texto nos axis que é cortado no eixo x.
@@ -113,19 +96,49 @@ dados %>%
     graphics::pairs()
 ```
 
-A visualização pairs do pacote graphics equivale a uma matriz de gráficos de dispersão.  
-```{r}
-dados %>%
-    select(comentaram_prop, PDI,
-           Internet, usuarios) %>%
-    na.exclude() %>%
-    correlate(method = "spearman")  %>%
-    network_plot(min_cor = 0) 
+A visualização pairs do pacote graphics equivale a uma matriz de gráficos de dispersão. Apesar de ser o gráfico padrão para avaliar tendência correlação não oferece cálculo de 
 
+```{r}
+ dados %>%
+     select(comentaram_prop, PDI,
+            Internet, usuarios) %>%
+     na.exclude() %>%
+     correlate(method = "kendall")  %>%
+     network_plot(min_cor = 0, colours = c("red", 
+    "white", "blue")) 
 ```
 
-Para valores mais baixos de correlação, abaixo de 0.6, o gráfico de correlation network  fica difícil de ler porque as cores ficam apagadas. Fica aparente no gráfico que a variável usuários é a menos correlata com o resto.  
+Para valores mais baixos de correlação, abaixo de 0.6, o gráfico de correlation network  fica difícil de ler porque as cores ficam apagadas. Fica aparente no gráfico que a variável usuários é a menos correlata com o resto. A curvatura não 
 
+```{r}
+dados %>%
+    na.exclude %>%
+    mutate(Internet = cut(Internet, breaks=c(25, 50, 75, 100)),
+           Internet = as.factor(Internet)) %>%
+    na.exclude %>%
+    ggplot(aes(comentaram_prop, PDI, size=usuarios, color = Internet)) +
+    geom_point()
+```
+
+Nesta visualização fica difícil ver alguma tendência, há muita informação.
+
+```{r}
+library(ggcorrplot)
+
+dados %>%
+    select(comentaram_prop,
+           PDI, Internet, usuarios) %>%
+    na.exclude() %>%
+    cor(method= "kendall") %>%
+  ggcorrplot(hc.order = TRUE,type = "lower", 
+             lab = TRUE, 
+             lab_size = 3, 
+             method="circle", 
+              colors = c("tomato2", "white", "springgreen3"), 
+             ggtheme=theme_bw)
+```
+
+A diminuição na escala dos números dificulta a leitura, esta visualização só provê uma representação do valor da métrica de correlação
 
 ## Bônus
 
@@ -139,4 +152,3 @@ dados %>%
             columns = c("comentaram_prop","PDI", "Internet", "usuarios"),
             upper = list(continuous = wrap("cor", method = "kendall")))
 ```
-
