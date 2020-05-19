@@ -70,8 +70,9 @@ dados %>%
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
-        y = "Porcentagem de usuários que comentam",
-        x = "Índice de Distância de Poder (PDI)" 
+        x = "Índice de Distância de Poder (PDI)" ,
+        y = "Porcentagem de usuários que comentam"
+       
     )
  
 ```
@@ -93,7 +94,7 @@ Artigo tomando como referência:
 https://www.ibpad.com.br/blog/analise-de-dados/6-dicas-para-visualizacao-de-dados/
 
 
-**ANÁLISE DO GRÁFICO 1*
+**ANÁLISE DO GRÁFICO 1**
 A primeira análise que faremos é baseada na **utilização de fontes legíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usar num gráfico. Lembre-se, é uma narrativa, não é arte. O segundo mostra uma fonte mais apropriada para os nossos fins.
 
  ```{r}
@@ -105,18 +106,21 @@ dados %>%
         size = log10(usuarios)
     )) +
     geom_point(alpha = .6)+
-    theme(plot.title = element_text(size = 12,face="bold",family="Lobster")) +
+    theme(plot.title = element_text(size = 10,face="bold")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
-        y = "Porcentagem de usuários que comentam",
-        x = "Índice de Distância de Poder (PDI)" 
+        x = "Índice de Distância de Poder (PDI)", 
+        y = "Porcentagem de usuários que comentam"
+        
     )
  
 ```
 
-Análise de gŕafico 2
-A segunda análise que faremos é baseada no **excesso de cores em um gráfico**. Estudos mostram que o excesso de cor pode confundir o visualizador.
+**ANÁLISE DO GRÁFICO 2**
+A segunda análise que faremos é baseada no **excesso de cores em um gráfico**. Estudos mostram que o excesso de cor pode confundir o visualizador. Perceba
+que pela visualização do gráfico fica difícil visualizar os países que possuem
+menos acesso à internet devido a grande quantidade de cores diferentes.
 
  ```{r}
 dados %>%
@@ -132,52 +136,61 @@ dados %>%
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
-        y = "Porcentagem de usuários que comentam",
-        x = "Índice de Distância de Poder (PDI)" 
+        x = "Índice de Distância de Poder (PDI)",
+        y = "Porcentagem de usuários que comentam"
+       
     )
- 
-```
+ ```
 
-Análise de gŕafico 3
-A terceira análise que faremos é baseada no **escolha das variáveis**. 
+**ANÁLISE DO GRÁFICO 3**
+A terceira análise que faremos é baseada na **escolha das variáveis**. Iremos mudar as variáveis x e size: a variável x será a Internet e o size será o PDI.
+Perceba que não é possível visualizar de forma clara a relação entre as variáveis
+PDI e a porcentagem de usuários que comentam devido a sobreposição de bolas.
 
  ```{r}
 dados %>%
     ggplot(aes(
-        x = PDI,
+        x = Internet,
         y = comentaram_prop,
         color = log10(usuarios),
-        size = Internet
+        size = PDI
     )) +
     geom_point(alpha = .6)+
     theme(plot.title = element_text(size = 10,face="bold")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
-        y = "Porcentagem de usuários que comentam",
-        x = "Índice de Distância de Poder (PDI)" 
+        x = "Internet" ,
+        y = "Porcentagem de usuários que comentam"
+       
     )
- 
 ```
-
-
 
 Bônus
 Inclua o continente dos países (`six_regions`) na visualização.
 
 ```{r}
 dados %>%
+    filter(!is.na(six_regions))%>%
     ggplot(aes(
         x = PDI,
-        y = responderam_prop,
+        y = comentaram_prop,
         size = Internet,
         color = log10(usuarios)
     )) +
     geom_point(alpha = .6) +
-    facet_grid(six_regions ~ ., scales = "free_y")
-
+    facet_wrap(six_regions ~ ., scales = "free_y",ncol=2)+
+    theme(plot.title = element_text(size = 10, face = "bold")) +
+    labs(
+        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
+        subtitle = "Por continente",
+        y = "Porcentagem de usuários que comentam",
+        x = "PDI" 
+    )
 ```
+
+
 A partir da análise do gráfico acima, percebemos que os maiores índices
 de comentários estão nos países da Europa.
-Análise a ser finalizada
+
  
