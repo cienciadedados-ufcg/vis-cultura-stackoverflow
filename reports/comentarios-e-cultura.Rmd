@@ -1,7 +1,7 @@
 ---
 title: "Ramon Nóbrega-comentarios-e-cultura"
-author: "Ramon Nóbrega"
-date: "18 de maio de 2020"
+author: "Ramon Nóbrega dos Santos"
+date: "19 de maio de 2020"
 output:
     html_document:
     df_print: paged
@@ -66,7 +66,7 @@ dados %>%
     )) +
     geom_point(alpha = .6)+
     theme_light()+
-    theme(plot.title = element_text(size = 12,face="bold",family="Times new Roman")) +
+    theme(plot.title = element_text(size = 10,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -106,17 +106,16 @@ dados %>%
         size = log10(usuarios)
     )) +
     geom_point(alpha = .6)+
-    theme(plot.title = element_text(size = 18,face="bold",family="Arial")) +
     theme_dark()+ 
+    theme(plot.title = element_text(size = 10,face="bold")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
-        x = "Índice de Distância de Poder (PDI)", 
+        x = "Índice de Distância de Poder (PDI)",
         y = "Porcentagem de usuários que comentam"
-        
+       
     )
- 
-```
+ ```
 
 **ANÁLISE DO GRÁFICO 2**
 A segunda análise que faremos é baseada no **excesso de cores em um gráfico**. Estudos mostram que o excesso de cor pode confundir o visualizador. Perceba
@@ -144,9 +143,8 @@ dados %>%
  ```
 
 **ANÁLISE DO GRÁFICO 3**
-A terceira análise que faremos é baseada na **escolha das variáveis**. Iremos mudar as variáveis x e size: a variável x será a Internet e o size será o PDI.
-Perceba que não é possível visualizar de forma clara a relação entre as variáveis
-PDI e a porcentagem de usuários que comentam devido a sobreposição de bolas.
+A terceira análise que faremos é baseada na **escolha das variáveis equivocadas**.
+Nos eixo X e Y devem estar as variáveis mais importantes para a análise. Dessa forma, para constatar essa hipótese, serão mudadas as variáveis x e size: a variável x que antes era o PDI será a Internet e a variável y que antes era PDI será os usuários. Perceba que não é possível visualizar de forma clara a relação entre as variáveis PDI e a porcentagem de usuários devido a não correspondência visual entre tamanho das bolas e cores.
 
  ```{r}
 dados %>%
@@ -166,8 +164,14 @@ dados %>%
        
     )
 ```
+
 **ANÁLISE DO GRÁFICO 4**
-A primeira análise que faremos é baseada na **utilização de fontes legíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usa-la num gráfico. Lembre-se, é uma narrativa, não é arte. 
+A quarta análise que faremos é baseada na **utilização de fontes ilegíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usa-la num gráfico. Lembre-se, é uma narrativa, não é arte. 
+
+
+
+**ANÁLISE DO GRÁFICO 5**
+A quinta análise que faremos é baseada na **utilização de fontes ilegíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usa-la num gráfico. Lembre-se, é uma narrativa, não é arte. 
 
 
 
@@ -190,8 +194,9 @@ dados %>%
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         subtitle = "Por continente",
-        y = "Porcentagem de usuários que comentam",
-        x = "PDI" 
+        x = "PDI",
+        y = "Porcentagem de usuários que comentam"
+        
     )
 ```
 
