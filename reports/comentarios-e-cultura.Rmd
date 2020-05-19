@@ -96,6 +96,7 @@ https://www.ibpad.com.br/blog/analise-de-dados/6-dicas-para-visualizacao-de-dado
 Excelente livro para refinamento de gráficos
 https://socviz.co/refineplots.html
 
+
 **ANÁLISE DO GRÁFICO 1**
 A primeira análise que faremos é baseada na **utilização de temas que tem uma relação ruim com as demais cores **. Perceba que a utilização do tema dark deixa o gráfico com uma dificuldade para enxergar valores mais escuros do azul que se confundem com os do cinza.
 
@@ -215,36 +216,83 @@ grafico5 + theme(legend.position = "top",
            
            )
 
-grafico5
 
 ``` 
-
 Bônus
 Inclua o continente dos países (`six_regions`) na visualização.
 
 ```{r}
-dados %>%
+
+grafico5<-dados %>%
     filter(!is.na(six_regions))%>%
     ggplot(aes(
         x = PDI,
         y = comentaram_prop,
-        size = Internet,
-        color = log10(usuarios)
-    )) +
-    geom_point(alpha = .6) +
-    facet_wrap(six_regions ~ ., scales = "free_y",ncol=2)+
-    theme(plot.title = element_text(size = 10, face = "bold")) +
-    labs(
-        title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
-        subtitle = "Por continente",
-        x = "PDI",
-        y = "Porcentagem de usuários que comentam"
+        color = Internet,
+        shape=six_regions,
+        size = log10(usuarios),
         
+    )) +
+    geom_point(alpha = .6)+
+    theme_light()+
+    theme(plot.title = element_text(size = 10,face="bold",family="Times new Roman")) +
+    labs(
+        title = "Relação entre os Usuários e seus comentários",
+        subtitle= "Incluindo PDI, acesso à Internet e continentes",
+        position="plot",
+        x = "Índice de Distância de Poder (PDI)" ,
+        y = "Porcentagem de usuários que comentam"
+       
     )
-```
+#adicionando mais características as legendas
+#https://socviz.co/refineplots.html
+grafico5 + theme(legend.position = "right",
+           plot.title = element_text(size=rel(1),
+                                     lineheight=.5,
+                                     family="Times",
+                                     face="bold.italic"),
+           axis.text.x = element_text(size=rel(1.1),
+                                      family="Courier",
+                                      face="bold"),
+           axis.text.y = element_text(size=rel(1.1),
+                                      family="Courier",
+                                      face="bold")
+           
+           )
+
+
+``` 
 
 
 A partir da análise do gráfico acima, percebemos que os maiores índices
 de comentários estão nos países da Europa.
+
+
+REFERÊNCIAS
+
+R cookbook
+https://rc2e.com/graphics
+
+GGPlot Scatter Plot 
+https://www.datanovia.com/en/lessons/ggplot-scatter-plot/
+
+A Detailed Guide to the ggplot Scatter Plot in R
+https://michaeltoth.me/a-detailed-guide-to-the-ggplot-scatter-plot-in-r.html
+
+
+Chapter 5 Graphics in R Part 1: ggplot2
+https://www.jeffdoser.com/files/_book/graphics-in-r-part-1-ggplot2.html
+
+Problemas em gráficos
+https://rafalab.github.io/dsbook/ggplot2.html
+
+Achieving Graphical Excellence
+https://bookdown.org/mikemahoney218/LectureBook/achieving-graphical-excellence.html
+
+Plot Two Continuous Variables: Scatter Graph and Alternatives
+http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/
+
+How to draw neat polygons around scatterplot regions in ggplot2 [closed]
+https://stats.stackexchange.com/questions/22805/how-to-draw-neat-polygons-around-scatterplot-regions-in-ggplot2
 
  
