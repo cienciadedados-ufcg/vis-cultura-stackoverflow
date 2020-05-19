@@ -56,7 +56,7 @@ Analisando a questão acima, é solicitada a investigação da relação entre q
 Para isso, a melhor forma de integrar todas elas é a partir de um gŕafico em que no eixo X tenha a variável PDI e no eixo Y a variável comentam_prop. A partir daí, podemos verificar como essas duas grandezas se relacionam. Também incluiremos as variáveis Internet e quantidade de usuários.
 
  ```{r}
-dados %>%
+grafico_base<-dados %>%
     ggplot(aes(
         x = PDI,
         y = comentaram_prop,
@@ -72,9 +72,9 @@ dados %>%
         position="plot",
         x = "Índice de Distância de Poder (PDI)" ,
         y = "Porcentagem de usuários que comentam"
-       
     )
- 
+grafico_base
+
 ```
 
 Pela análise do gráfico acima, percebemos que, de forma geral, existe uma relação inversamente proporcional entre a PDI e a comentaram_prop.
@@ -93,6 +93,8 @@ Artigo tomando como referência:
 6 dicas para a visualização de dados disponível em
 https://www.ibpad.com.br/blog/analise-de-dados/6-dicas-para-visualizacao-de-dados/
 
+Excelente livro para refinamento de gráficos
+https://socviz.co/refineplots.html
 
 **ANÁLISE DO GRÁFICO 1**
 A primeira análise que faremos é baseada na **utilização de temas que tem uma relação ruim com as demais cores **. Perceba que a utilização do tema dark deixa o gráfico com uma dificuldade para enxergar valores mais escuros do azul que se confundem com os do cinza.
@@ -106,7 +108,7 @@ dados %>%
         size = log10(usuarios)
     )) +
     geom_point(alpha = .6)+
-    theme_dark()+ 
+    theme_dark()+
     theme(plot.title = element_text(size = 10,face="bold")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
@@ -163,6 +165,7 @@ grafico3<-dados %>%
         y = "Porcentagem de usuários que comentam"
        
     )
+    grafico3
 ```
 
 **ANÁLISE DO GRÁFICO 4**
@@ -171,7 +174,7 @@ A quarta análise que faremos é baseada na **utilização de fontes ilegíveis*
 
 
 **ANÁLISE DO GRÁFICO 5**
-A quinta análise que faremos é baseada na **utilização de cores erradas para títulos e legendas**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. 
+A quinta análise que faremos é baseada na **utilização de cores erradas para títulos e legendas, além do posicionamento ruim da legenda**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. 
 
 ```{r}
 
