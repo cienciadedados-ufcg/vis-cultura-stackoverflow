@@ -65,7 +65,7 @@ dados %>%
         
     )) +
     geom_point(alpha = .6)+
-    #par(family = "Georgia")+
+    theme_light()+
     theme(plot.title = element_text(size = 12,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
@@ -95,7 +95,7 @@ https://www.ibpad.com.br/blog/analise-de-dados/6-dicas-para-visualizacao-de-dado
 
 
 **ANÁLISE DO GRÁFICO 1**
-A primeira análise que faremos é baseada na **utilização de fontes legíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usar num gráfico. Lembre-se, é uma narrativa, não é arte. O segundo mostra uma fonte mais apropriada para os nossos fins.
+A primeira análise que faremos é baseada na **utilização de temas que tem uma relação ruim com as demais cores **. Perceba que a utilização do tema dark deixa o gráfico com uma dificuldade para enxergar valores mais escuros do azul que se confundem com os do cinza.
 
  ```{r}
 dados %>%
@@ -106,7 +106,8 @@ dados %>%
         size = log10(usuarios)
     )) +
     geom_point(alpha = .6)+
-    theme(plot.title = element_text(size = 10,face="bold")) +
+    theme(plot.title = element_text(size = 18,face="bold",family="Arial")) +
+    theme_dark()+ 
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -165,6 +166,11 @@ dados %>%
        
     )
 ```
+**ANÁLISE DO GRÁFICO 4**
+A primeira análise que faremos é baseada na **utilização de fontes legíveis**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. Sabemos que Lobster é bonito, mas não significa que você deve usa-la num gráfico. Lembre-se, é uma narrativa, não é arte. 
+
+
+
 
 Bônus
 Inclua o continente dos países (`six_regions`) na visualização.
