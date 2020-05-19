@@ -65,7 +65,7 @@ dados %>%
         
     )) +
     geom_point(alpha = .6)+
-    par(family = "Georgia")+
+    #par(family = "Georgia")+
     theme(plot.title = element_text(size = 12,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
@@ -79,6 +79,10 @@ dados %>%
 Pela análise do gráfico acima, percebemos que, de forma geral, existe uma relação inversamente proporcional entre a PDI e a comentaram_prop.
 Ou seja, países que possuem as relações hierárquicas menos engessadas,
 com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades e a hierarquia, comentam menos.Também é possível observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com populações menores comentam menos do que países com populações maiores.
+
+Percebemos também que pela coloração das bolas mais claras dos países que possuem mais acesso à internet, os seus usuários comentam mais. Isso se deve a ter estruturas sociais mais democráticas. Com relação a quantidade de usuários das
+plataformas, de forma geral, percebe-se uma relação proporcional entre o número de usuários e a quantidade de comentários.
+
 
 ## Outras formas de ver
 
