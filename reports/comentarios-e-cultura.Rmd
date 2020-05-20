@@ -1,6 +1,6 @@
 ---
-title: "Ramon Nóbrega-comentarios-e-cultura"
-author: "Ramon Nóbrega dos Santos"
+title: "Disciplina FPCC2 - Prof. Fábio - Lab 3.2"
+author: "Ramon Nóbrega dos Santos(Aluno especial- FPCC2 - 2020.1)"
 date: "19 de maio de 2020"
 output:
     html_document:
@@ -8,7 +8,7 @@ output:
 theme: sandstone
 ---
     
-    Ramon Nóbrega (Aluno especial- FPCC2 - 2020.1)
+    
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -52,6 +52,8 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.
 
 ## Examinando essa relação
+Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
+
 Analisando a questão acima, é solicitada a investigação da relação entre quatro variáveis: PDI, comentaram_prop, Internet e usuarios.
 Para isso, a melhor forma de integrar todas elas é a partir de um gŕafico em que no eixo X tenha a variável PDI e no eixo Y a variável comentam_prop. A partir daí, podemos verificar como essas duas grandezas se relacionam. Também incluiremos as variáveis Internet e quantidade de usuários.
 
@@ -66,7 +68,8 @@ grafico_base<-dados %>%
     )) +
     geom_point(alpha = .6)+
     theme_light()+
-    theme(plot.title = element_text(size = 10,face="bold",family="Times new Roman")) +
+    theme(plot.title = element_text(size = 13,face="bold",family="Times new Roman")) +
+    
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -76,30 +79,19 @@ grafico_base<-dados %>%
 grafico_base
 
 ```
-
-Pela análise do gráfico acima, percebemos que, de forma geral, existe uma relação inversamente proporcional entre a PDI e a comentaram_prop.
-Ou seja, países que possuem as relações hierárquicas menos engessadas,
-com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades e a hierarquia, comentam menos.Também é possível observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com populações menores comentam menos do que países com populações maiores.
+<br></br><br></br>
+Pela análise do gráfico acima, percebemos que, de forma geral, existe uma relação inversamente proporcional entre a PDI e a comentaram_prop. Ou seja, países que possuem as relações hierárquicas menos engessadas, com menores PDI, os seus usuários são os que mais comentam. Já países com os maiores PDI, aqueles que seus habitantes acham normal as desigualdades e a hierarquia, comentam menos.Também é possível observar que países com menores PDI possuem mais acesso à internet. De forma geral, países com populações menores comentam menos do que países com populações maiores.
 
 Percebemos também que pela coloração das bolas mais claras dos países que possuem mais acesso à internet, os seus usuários comentam mais. Isso se deve a ter estruturas sociais mais democráticas. Com relação a quantidade de usuários das
 plataformas, de forma geral, percebe-se uma relação proporcional entre o número de usuários e a quantidade de comentários.
 
 
 ## Outras formas de ver
+Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
 
-Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima.
-
-Artigo tomando como referência:
-6 dicas para a visualização de dados disponível em
-https://www.ibpad.com.br/blog/analise-de-dados/6-dicas-para-visualizacao-de-dados/
-
-Excelente livro para refinamento de gráficos
-https://socviz.co/refineplots.html
-
-
-**ANÁLISE DO GRÁFICO 1**
+<font size="5">**ANÁLISE DO GRÁFICO 1**</font></br><br></br>
 A primeira análise que faremos é baseada na **utilização de temas que tem uma relação ruim com as demais cores **. Perceba que a utilização do tema dark deixa o gráfico com uma dificuldade para enxergar valores mais escuros do azul que se confundem com os do cinza.
-
+<br></br><br></br>
  ```{r}
 dados %>%
     ggplot(aes(
@@ -110,7 +102,7 @@ dados %>%
     )) +
     geom_point(alpha = .6)+
     theme_dark()+
-    theme(plot.title = element_text(size = 10,face="bold")) +
+    theme(plot.title = element_text(size = 13,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -119,8 +111,9 @@ dados %>%
        
     )
  ```
+<br></br><br></br>
 
-**ANÁLISE DO GRÁFICO 2**
+<font size="5">**ANÁLISE DO GRÁFICO 2**</font></br><br></br>
 A segunda análise que faremos é baseada no **excesso de cores em um gráfico**. Estudos mostram que o excesso de cor pode confundir o visualizador. Perceba
 que pela visualização do gráfico fica difícil visualizar os países que possuem
 menos acesso à internet devido a grande quantidade de cores diferentes.
@@ -135,7 +128,7 @@ dados %>%
     )) +
     geom_point(alpha = .6)+
     scale_colour_gradientn(colours=rainbow(4)) +
-    theme(plot.title = element_text(size = 10,face="bold")) +
+    theme(plot.title = element_text(size = 13,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -144,11 +137,13 @@ dados %>%
        
     )
  ```
+<br></br><br></br>
+ 
 
-**ANÁLISE DO GRÁFICO 3**
+<font size="5">**ANÁLISE DO GRÁFICO 3**</font></br><br></br>
 A terceira análise que faremos é baseada na **escolha das variáveis equivocadas**.
 Nos eixo X e Y devem estar as variáveis mais importantes para a análise. Dessa forma, para constatar essa hipótese, serão mudadas as variáveis x e size: a variável x que antes era o PDI será a Internet e a variável y que antes era PDI será os usuários. Perceba que não é possível visualizar de forma clara a relação entre as variáveis PDI e a porcentagem de usuários devido a não correspondência visual entre tamanho das bolas e cores.
-
+<br></br><br></br>
  ```{r}
 grafico3<-dados %>%
     ggplot(aes(
@@ -158,7 +153,7 @@ grafico3<-dados %>%
         size = PDI
     )) +
     geom_point(alpha = .6)+
-    theme(plot.title = element_text(size = 10,face="bold")) +
+    theme(plot.title = element_text(size = 13,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -168,24 +163,28 @@ grafico3<-dados %>%
     )
     grafico3
 ```
+<br></br><br></br>
 
-**ANÁLISE DO GRÁFICO 4**
+
+<font size="5">**ANÁLISE DO GRÁFICO 4**</font>
+<br></br><br></br>
 A quarta análise que faremos é baseada na **utilização de tamanho equivocado de escala para o elemento size da variável Internet**. Perceba que a partir dessa escolha, fica impossível diferenciar o acesso
 à internet entre os países, comprometendo também a visualização da quantidade de 
 usuários por pais, além de dificultar a visualização da relação entre PDI X comentaram_prop
+<br></br><br></br>
  ```{r}
 grafico4<-dados %>%
     ggplot(aes(
         x = PDI,
         y = comentaram_prop,
-        color = Internet,
+        color= Internet,
         size = log10(usuarios),
         
     )) +
     geom_point(alpha = .6)+
     scale_size_continuous(range = c(10,20)) +
     theme_light()+
-    theme(plot.title = element_text(size = 10,face="bold",family="Times new Roman")) +
+    theme(plot.title = element_text(size = 13,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -193,12 +192,14 @@ grafico4<-dados %>%
         y = "Porcentagem de usuários que comentam"
     )
 grafico4
-
 ```
+<br></br><br></br>
 
 
-**ANÁLISE DO GRÁFICO 5**
-A quinta análise que faremos é baseada na **utilização de cores inapropridas para títulos e legendas, além do posicionamento ruim da legenda**. Parece uma dica tão óbvia, mas o uso de fontes regularmente é uma fonte de problemas numa visualização. 
+<font size="5">**ANÁLISE DO GRÁFICO 5**</font><br></br><br></br>
+A quinta análise que faremos é baseada na **utilização de cores inapropridas para títulos e legendas, além do posicionamento ruim da legenda**. Perceba que fica quase impossível enxergar as informações do título e legenda. Além disso, o posicionamento da legenda fica muito próximo do título, empobrecendo a estética
+do gráfico.
+<br></br><br></br>
 
 ```{r}
 
@@ -212,7 +213,7 @@ grafico5<-dados %>%
     )) +
     geom_point(alpha = .6)+
     theme_light()+
-    theme(plot.title = element_text(size = 10,face="bold",family="Times new Roman")) +
+    theme(plot.title = element_text(size = 13,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
         position="plot",
@@ -238,12 +239,12 @@ grafico5 + theme(legend.position = "top",
                                       color="yellow")
            
            )
-
-
 ``` 
-Bônus
-Inclua o continente dos países (`six_regions`) na visualização.
+<br></br><br></br>
 
+<font size="5">Bônus - Inclua a região dos países (`six_regions`) na visualização.</font> <br></br> <br></br><br></br>
+
+Primeiramente, considerei a utilização de um gráfico que incluia uma forma shape referente a região.
 ```{r}
 
 grafico5<-dados %>%
@@ -258,7 +259,7 @@ grafico5<-dados %>%
     )) +
     geom_point(alpha = .6)+
     theme_light()+
-    theme(plot.title = element_text(size = 10,face="bold",family="Times new Roman")) +
+    theme(plot.title = element_text(size = 13,face="bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários e seus comentários",
         subtitle= "Incluindo PDI, acesso à Internet e continentes",
@@ -283,10 +284,11 @@ grafico5 + theme(legend.position = "right",
            
            )
 ``` 
+<br></br><br></br>
 Inicialmente foi considerado o gráfico acima, entretanto, ficou muito difícil
 a visualização já que os elementos de usuário e internet se sobreponham. Daí, foi
-criado o gráfico a seguir.
-
+criado o gráfico a seguir, o qual é bem mais ilustrativo já que é possível a visualização clara das diferenças entre as seis regiões consideradas. A partir da análise do gráfico acima, percebemos que os maiores índices de comentários estão nos países da Europa Central e Ásia.
+<br></br><br></br>
 ```{r}
 dados %>% 
     filter(!is.na(six_regions)) %>%
@@ -298,21 +300,25 @@ dados %>%
     )) +
     facet_wrap(~ six_regions) +
     geom_point(alpha = .7) +
-    theme(plot.title = element_text(size = 10, face = "bold")) +
+    theme(plot.title = element_text(size = 13, face = "bold",family="Times new Roman")) +
     labs(
         title = "Relação entre os Usuários, seus comentários, PDI e acesso à Internet",
-        subtitle = "Por continente",
+        subtitle = "Por região",
         y = "Porcentagem de usuários que comentam",
         x = "PDI" 
     )
 ```
+<br></br><br></br>
 
+<br></br><br></br>
+<br></br><br></br>
+<font size="5">**REFERÊNCIAS**</font>
 
-A partir da análise do gráfico acima, percebemos que os maiores índices
-de comentários estão nos países da Europa.
+6 dicas para a visualização de dados disponível em
+https://www.ibpad.com.br/blog/analise-de-dados/6-dicas-para-visualizacao-de-dados/
 
-
-REFERÊNCIAS
+Excelente livro para refinamento de gráficos
+https://socviz.co/refineplots.html
 
 R cookbook
 https://rc2e.com/graphics
@@ -322,7 +328,6 @@ https://www.datanovia.com/en/lessons/ggplot-scatter-plot/
 
 A Detailed Guide to the ggplot Scatter Plot in R
 https://michaeltoth.me/a-detailed-guide-to-the-ggplot-scatter-plot-in-r.html
-
 
 Chapter 5 Graphics in R Part 1: ggplot2
 https://www.jeffdoser.com/files/_book/graphics-in-r-part-1-ggplot2.html
