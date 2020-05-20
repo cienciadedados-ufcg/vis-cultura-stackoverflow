@@ -10,8 +10,8 @@ theme: sandstone
 library(tidyverse)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
-theme_set(theme_bw())
+source(here::here("code/import_data.R"))
+theme_set(theme_gray())
 
 knitr::opts_chunk$set(tidy = FALSE,
                       fig.width = 6,
@@ -42,13 +42,176 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 
 ## Examinando essa relação
 
-Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
+**Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.** 
+
+RESPOSTA:
+
+Para termos uma boa visualização em pontos o gráfico deve conter elementos visuais além da concentração dos pontos da relação: 
+
+```{r echo=TRUE}
+dados %>%
+    ggplot(aes(x =PDI, y = comentaram_prop, size=log10(usuarios), colour= Internet )) +
+    geom_point()+
+    labs(
+        x = "Índice de Distância de Poder(PDI)",
+        y = "Proporção de comentários",
+        title = "Relação entre Comentários e Distância do Poder(PDI)",
+        subtitle = "O Diametro dos círculos representa quantidade de usuários na escala log10",
+        caption = "A escala em cores representa o quanto as pessoas tem acesso à internet  "
+    )+
+     scale_colour_continuous(low = "beige", high = "brown")
+
+```
+
+Através da escala de cores, observamos que a maior concentração de usuários da internet estão em países que apresentam maiores proporção de comentários e menores índices PDI, o que é típico de países desenvolvidos, e isso acontece também para a quantidade de usuários que tem uma grande concentração nesta região da visualização. 
+    O gráfico também mostra uma típica distribuição de regressão linear negativa, ou seja, a medida que o PDI cresce a proporção de comentários diminui, mostrando um cenário onde países que tem um alto PDI comentam menos, típico de países subdesenvolvidos.
+
 
 ## Outras formas de ver
 
 Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
 
+Vejamos essa próxima visualização:
+
+```{r echo=TRUE}
+
+dados %>%
+    ggplot(aes(x =PDI, y = comentaram_prop, size=log10(usuarios), colour= Internet )) +
+    geom_jitter(width = .1, alpha = .2) +
+    geom_point()+
+    labs(
+        x = "Índice de Distância de Poder(PDI)",
+        y = "Proporção de comentários",
+        title = "V1-Relação entre Comentários e Distância do Poder(PDI)",
+        subtitle = "O Diametro dos círculos representa quantidade de usuários na escala log10",
+        caption = "A escala em cores representa o quanto as pessoas tem acesso à internet  "
+    )
+ 
+```
+
+Este gráfico apresenta os mesmos conceitos que o primeiro, porém apresenta uma escala de cores em apenas uma tonalidade de cor o que pode dificultar a diferenciação visual, principalmente se considerar uma pessoa daltônica (*Tritanopia*), Assim como a próxima visualização (*Protanopia e Deuteranopia*):
+
+```{r echo=TRUE}
+dados %>%
+    ggplot(aes(x =PDI, y = comentaram_prop, size=log10(usuarios), colour= Internet )) +
+    #geom_jitter(width = .1, alpha = .2) +
+    geom_point()+
+    labs(
+        x = "Índice de Distância de Poder(PDI)",
+        y = "Proporção de comentários",
+        title = "V2-Relação entre Comentários e Distância do Poder(PDI)",
+        subtitle = "O Diametro dos círculos representa quantidade de usuários na escala log10",
+        caption = "A escala em cores representa o quanto as pessoas tem acesso à internet  "
+    )+
+    scale_colour_continuous(low = "green", high = "red")
+```
+
+
+A escolha de um atributo que tenha uma grande variação de valores representado em uma escala de cores pode comprometer a diferenciação dos pontos:
+
+```{r echo=TRUE, warning=FALSE}
+
+dados %>%
+    ggplot(aes(x = PDI, y =comentaram_prop , size=Internet, colour= usuarios)) +
+   # geom_jitter(width = .1, alpha = .2) +
+    geom_point()+
+     labs(
+        x = "Índice de Distância de Poder(PDI)",
+        y = "Proporção de comentários",
+        title = "V3-Relação entre Comentários e Distância do Poder(PDI)",
+        subtitle = "O Diametro dos círculos representa o quanto as pessoas tem acesso à internet",
+        caption = "A escala em cores representa quantidade de usuários "
+    )+
+    scale_colour_continuous(low = "beige", high = "brown")
+
+```
+
+
+Aplicando a escala de log 10 ao número de usuários melhora a vizualização porém diminue bastante informações, antes o gradiente era até 125000, agora passa a ser até 5 :
+
+```{r echo=TRUE, warning=FALSE}
+
+dados %>%
+    ggplot(aes(x = PDI, y =comentaram_prop , size=Internet, colour= log10(usuarios))) +
+    geom_point()+
+     labs(
+        x = "Índice de Distância de Poder(PDI)",
+        y = "Proporção de comentários",
+        title = "V4-Relação entre Comentários e Distância do Poder(PDI)",
+        subtitle = "O Diametro dos círculos representao quanto as pessoas tem acesso à internet ",
+        caption = "A escala em cores representa quantidade de usuários na escala log10"
+    )+
+    scale_colour_continuous(low = "beige", high = "brown")
+
+```
+
+
+Escolher o atributo que tem mais variabilidade para ficar no eixo y reduz o nível de informação visual no gráfico já que temos uma área maior na horizontal:
+```{r echo=TRUE, warning=FALSE}
+
+dados %>%
+    ggplot(aes(x = comentaram_prop, y =PDI , size=log10(usuarios), colour= Internet)) +
+    #geom_jitter(width = .1, alpha = .2) +
+    geom_point()+
+     labs(
+          x = "Proporção de comentários",
+        y = "Índice de Distância de Poder(PDI)" ,
+        title = "V5-Relação entre Comentários e Distância do Poder(PDI)",
+        subtitle = "O Diametro dos círculos representa quantidade de usuários na escala log10",
+        caption = "A escala em cores representa o quanto as pessoas tem acesso à internet  "
+    )+
+    scale_colour_continuous(low = "beige", high = "brown")
+
+```
+
+
+
 ## Bônus
 
 Inclua o continente dos países (`six_regions`) na visualização.
 
+RESPOSTA:
+
+
+Para adicionar mais uma informação ao gráfico podemos utilizar as formas (*shapes*):
+
+```{r echo=TRUE, warning=FALSE}
+
+    grafico5<-dados %>%
+    filter(!is.na(six_regions))%>%
+    ggplot(aes(
+        x = PDI ,
+        y = comentaram_prop,
+        color = Internet,
+        shape=six_regions,
+        size = log10(usuarios),
+       
+    )) +
+    geom_point(alpha = .8)+
+    theme_gray()+
+    theme(plot.title = element_text(size = 10,face="bold")) +
+    labs(
+        title = "Relação entre os Usuários e seus comentários",
+        subtitle= "Incluindo PDI, acesso à Internet e continentes",
+        position="plot",
+        x = "Índice de Distância de Poder (PDI)" ,
+        y = "Porcentagem de usuários que comentam"
+       
+    )+
+    scale_colour_continuous(low = "orange", high = "brown")
+grafico5 + theme(legend.position = "right",
+           plot.title = element_text(size=rel(1),
+                                     lineheight=.5,
+                                     family="Times",
+                                     face="bold.italic"),
+           axis.text.x = element_text(size=rel(1.1),
+                                      family="Courier",
+                                      face="bold"),
+           axis.text.y = element_text(size=rel(1.1),
+                                      family="Courier",
+                                      face="bold")
+           
+           )
+```
+
+Dessa forma, podemos notar na relação todas as informações já discutidas antes. Continentes desenvolvidos (com baixo PDI) contribuindo mais, porém com números de acessos à internet e números de usuários também maior, e que a medida que o PDI aumenta, as contribuições diminuem e o gráfico mostra que essa característica tem uma concentração em regiões mais subdesenvolvidas, como a Africa.
