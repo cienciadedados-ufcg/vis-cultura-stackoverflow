@@ -10,7 +10,11 @@ theme: sandstone
 library(tidyverse)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
+library(RColorBrewer)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+source(here::here("code/import_data.R"))
 theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
@@ -44,11 +48,175 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 
 Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
 
+```{r,fig.height=5, fig.width=9}
+cores <- brewer.pal(8, "Dark2")
+
+dados %>% ggplot(aes(x = reorder(PDI, PDI), y = comentaram_prop,
+                color = Internet))+
+    geom_point()+
+    geom_point(size=3) +
+    scale_color_gradientn(colours = cores)+
+    labs(
+        x = "Quão hierárquicas são as relações em um país (PDI)",
+        y = "Proporção das pessoas do país que \n comentou nas questões de outros",
+        title = "Relação entre quanto as pessoas de diferentes países \n comentam em questões dos outros",
+        caption = "Apenas usuários > 200"
+    )
+
+   
+
+```
+
+
+Segundo o gráfico, temos a relação entre a quantidade de comentários feitos por usuários de outros países e o quão hierárquicas são as relações entre eles através do índice PDI(Power Distance Index).Podemos ver que grandes valores de PDI não implicam em mais proporção de pessoas que comentaram em outros países.
+
+
+
 ## Outras formas de ver
 
 Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
 
+
+```{r}
+
+#visualização 1
+
+cores <- brewer.pal(8, "Dark2")
+
+dados %>% ggplot(aes(x = reorder(`PDI`,`PDI`), y = `comentaram_prop`,color = `Internet`)) +
+    geom_point(size=3) +
+    scale_color_gradientn(colours = cores)+
+    labs(
+        x = "Quão hierárquicas são as relações em um país (PDI)",
+        y = "Proporção das pessoas do país que \n comentou nas questões de outros",
+        title = "V1 - Problemas com os valores do eixo X",
+        caption = "Apenas usuários > 200"
+    )
+```
+
+
+
+Na visualização V1, os valores do PDI estão muito próximos e se sobrepõem, impedindo sua correta visualização.
+
+
+
+```{r,fig.height=5, fig.width=9}
+
+#visualização 2
+
+cores <- brewer.pal(8, "Dark2")
+
+dados %>% ggplot(aes(x = reorder(`PDI`,`PDI`), y = `comentaram_prop`,color = `Internet`)) +
+    geom_point(size=3) +
+    scale_color_gradientn(colours = cores)+
+    labs(
+        x = "Quão hierárquicas são as relações em um país (PDI)",
+        y = "Proporção das pessoas do país que comentou nas questões de outros título extenso",
+        title = "V2 - Problemas com os títulos extensos",
+        caption = "Apenas usuários > 200"
+    )
+```
+
+
+
+
+
+
+
+Na visualização V2, existe um título(eixo y) que está muito extenso e no momento da visualização está sendo cortado, ocasionando em perda de informação.
+
+
+```{r,fig.height=5, fig.width=9}
+
+#visualização 3
+
+cores <- brewer.pal(8, "Dark2")
+
+dados %>% ggplot(aes(x = PDI,y = comentaram_prop)) +
+    geom_point(size=3) +
+    scale_color_gradientn(colours = cores)+
+    labs(
+        x = "Quão hierárquicas são as relações em um país (PDI)",
+        y = "Proporção das pessoas do país que comentou nas questões de outros",
+        title = "V3 - Problemas com cores",
+        caption = "Apenas usuários > 200"
+    )+coord_flip()
+```
+
+
+
+Um gráfico com tantas informações e sem diferenciação de cores não é fácil de se entender, como podemos ver no gráfico V3
+
+
+```{r}
+
+#visualização 4
+cores <- brewer.pal(8, "Dark2")
+dados %>% ggplot(aes(x = reorder(PDI, PDI), y = comentaram_prop,
+                color = Internet))+
+    geom_point()+
+    scale_color_gradientn(colours = cores)+
+    labs(
+        x = "Quão hierárquicas são as relações em um país (PDI)",
+        y = "Proporção das pessoas do país \n que comentou nas questões de outros",
+        title = "V4 - Problemas com ângulos",
+        caption = "Apenas usuários > 200"
+    )+
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ 
+
+```
+
+Na visualização 4 os valores do eixo y tiveram o ângulo de visualização alterados, o que não é considerado uma boa prática. Quando os valores são grandes e se sobrepõem o correto é inverter os eixos.
+
+
+
+
+```{r}
+
+#visualização 5
+cores <- brewer.pal(8, "Dark2")
+dados %>% ggplot(aes(x = reorder(PDI, comentaram_prop), y = comentaram_prop,
+                color = Internet))+
+    geom_point()+
+    labs(
+        x = "Quão hierárquicas são as relações em um país (PDI)",
+        y = "Proporção das pessoas do país \n que comentou nas questões de outros",
+        title = "V5 - Problemas ordem doas valores",
+        caption = "Apenas usuários > 200"
+    )
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ 
+
+```
+
+
+Na visualização v5 os valores do eixo x não estão ordenados, dificultando o entendimento do gráfico.
+
+
+
 ## Bônus
 
 Inclua o continente dos países (`six_regions`) na visualização.
+
+```{r}
+cores <- brewer.pal(10, "BrBG")
+
+dados %>% ggplot(aes(x = `PDI`, y = `comentaram_prop`,color = `Internet`)) +
+    geom_jitter() +
+    scale_color_gradientn(colours = cores)+
+    labs(
+        x = "Quão hierárquicas são as relações em um país (PDI)",
+        y = "Proporção das pessoas do país que comentou nas questões de outros",
+        title = "Relação entre quanto as pessoas de diferentes países",
+        subtitle="comentam em questões dos outros",
+        caption = "Apenas usuários > 200"
+    )+
+    facet_wrap(~six_regions)
+
+```
+
+
+Foi feito o gráfico levando em consideração as 6 regiões.
+
 
