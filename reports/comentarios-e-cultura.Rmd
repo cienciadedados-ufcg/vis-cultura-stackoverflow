@@ -10,7 +10,7 @@ theme: sandstone
 library(tidyverse)
 library(here)
 library(viridis)
-source(here::here("code/lib.R"))
+source(here::here("code/import_data.R"))
 theme_set(theme_bw())
 
 knitr::opts_chunk$set(tidy = FALSE,
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(tidy = FALSE,
                       fig.height = 5)
 ```
 
-```{r read}
+```{r read, echo=FALSE}
 dados = read_csv(
     here::here("data/participation-per-country.csv"),
     col_types = cols(
@@ -33,7 +33,7 @@ dados = read_csv(
     )
 ) %>% 
     filter(usuarios > 200)
-glimpse(dados)
+
 ```
 
 Estamos interessados na relação entre quanto as pessoas de diferentes países comentam em questões dos outros. A proporção das pessoas do país que comentou nas questões de outros está medido na variável `comentaram_prop`. 
@@ -42,13 +42,112 @@ Considerando essa variável, queremos examinar a relação entre ela e o quão h
 
 ## Examinando essa relação
 
-Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto. 
+Faça uma visualização que usa os princípios de eficácia no projeto de visualizações para facilitar as comparações que você acha que são as mais importantes para entendermos esse contexto.
+
+```{r echo=TRUE, fig.width = 9, fig.align='center', message=FALSE}
+
+ggplot(dados) +
+    aes(x=comentaram_prop, y=PDI, color=Internet, size=usuarios) +
+    ggtitle("Visualização Eficaz - Relação entre comentários, PDI, usuários e internet") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_point() +
+    scale_color_distiller(palette = "Spectral") +
+    scale_size_continuous() +
+    geom_smooth(color="Black", size=.1) +
+    xlab("Proporção das pessoas do país que comentou nas questões de outros") +
+    labs(color="Acesso à internet (%)", size="Quantidade de usuários")
+    
+```
+
 
 ## Outras formas de ver
 
-Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima. 
+Em seguida, faça 5 visualizações que usem as mesmas variáveis e também pontos, mas que sejam **menos eficazes** que a que você escolheu acima.
+
+```{r echo=TRUE, fig.width = 9, fig.align='center', message=FALSE}
+
+ggplot(dados) +
+    aes(x=comentaram_prop, y=PDI, color=Internet, size=usuarios) +
+    ggtitle("Visualização 1 - Relação entre comentários, PDI, usuários e internet") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_point() +
+    scale_color_distiller(palette = "Spectral") +
+    scale_size_continuous() +
+    xlab("Proporção das pessoas do país que comentou nas questões de outros") +
+    labs(color="Acesso à internet (%)", size="Quantidade de usuários")
+    
+```
+
+```{r echo=TRUE, fig.width = 9, fig.align='center', message=FALSE}
+
+ggplot(dados) +
+    aes(x=comentaram_prop, y=PDI, color=Internet, size=usuarios) +
+    ggtitle("Visualização 2 - Relação entre comentários, PDI, usuários e internet") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_point() +
+    scale_color_distiller() +
+    scale_size_continuous() +
+    geom_smooth(color="Black", size=.1) +
+    xlab("Proporção das pessoas do país que comentou nas questões de outros") +
+    labs(color="Acesso à internet (%)", size="Quantidade de usuários")
+    
+```
+
+```{r echo=TRUE, fig.width = 9, fig.align='center', message=FALSE}
+
+ggplot(dados) +
+    aes(x=comentaram_prop, y=PDI, color=Internet, size=usuarios) +
+    geom_point() +
+    scale_color_distiller(palette = "Spectral") +
+    scale_size_continuous() +
+    geom_smooth(color="Black", size=.1)
+    
+```
+
+```{r echo=TRUE, fig.width = 9, fig.align='center', message=FALSE}
+
+ggplot(dados) +
+    aes(x=comentaram_prop, y=PDI, color=Internet, shape=usuarios) +
+    ggtitle("Visualização 4 - Relação entre comentários, PDI, usuários e internet") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_point() +
+    scale_color_distiller(palette = "Spectral") +
+    scale_shape_binned() +
+    geom_smooth(color="Black", size=.1) +
+    xlab("Proporção das pessoas do país que comentou nas questões de outros") +
+    labs(color="Acesso à internet (%)", size="Quantidade de usuários")
+    
+```
+
+```{r echo=TRUE, fig.width = 9, fig.align='center', message=FALSE}
+
+ggplot(dados) +
+    aes(x=comentaram_prop, y=PDI, color=Internet, size=usuarios) +
+    ggtitle("Visualização 5 - Relação entre comentários, PDI, usuários e internet") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_point() +
+    scale_color_distiller(palette = "Spectral") +
+    scale_size_continuous(range = c(10, 15)) +
+    geom_smooth(color="Black", size=.1) +
+    xlab("Proporção das pessoas do país que comentou nas questões de outros") +
+    labs(color="Acesso à internet (%)", size="Quantidade de usuários")
+    
+```
 
 ## Bônus
 
 Inclua o continente dos países (`six_regions`) na visualização.
 
+```{r echo=TRUE, fig.width = 9, fig.align='center', message=FALSE}
+
+ggplot(dados) +
+    aes(x=comentaram_prop, y=PDI, color=Internet, size=usuarios, shape=six_regions) +
+    ggtitle("Bônus - Relação entre comentários, PDI, usuários e internet") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_point() +
+    scale_color_distiller(palette = "Spectral") +
+    scale_size_continuous(range = c(1, 15)) +
+    xlab("Proporção das pessoas do país que comentou nas questões de outros") +
+    labs(color="Acesso à internet (%)", size="Quantidade de usuários")
+    
+```
