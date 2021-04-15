@@ -1,0 +1,32 @@
+---
+title: "Correlações"
+output: html_notebook
+---
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+theme_set(theme_bw())
+```
+
+```{r read}
+dados_raw = read_csv(
+    here::here("data/participation-per-country.csv"),
+    col_types = cols(
+        .default = col_double(),
+        site = col_character(),
+        country = col_character(),
+        geo = col_character(),
+        four_regions = col_character(),
+        eight_regions = col_character(),
+        six_regions = col_character(),
+        `World bank income group 2017` = col_character()
+    )
+)
+
+dados = dados_raw %>% 
+    filter(usuarios > 200, site == "StackOverflow")
+
+glimpse(dados_raw)
+```
