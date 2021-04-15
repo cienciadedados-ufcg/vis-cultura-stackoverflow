@@ -1,0 +1,102 @@
+---
+title: "Coeficientes de Correlação"
+output: html_notebook
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+library(skimr)
+theme_set(theme_bw())
+```
+
+```{r read}
+dados_raw = read_csv(
+    here::here("data/participation-per-country.csv"),
+    col_types = cols(
+        .default = col_double(),
+        site = col_character(),
+        country = col_character(),
+        geo = col_character(),
+        four_regions = col_character(),
+        eight_regions = col_character(),
+        six_regions = col_character(),
+        `World bank income group 2017` = col_character()
+    )
+) %>% janitor::clean_names()
+
+dados = dados_raw %>% 
+    filter(usuarios > 200, site == "StackOverflow")
+
+glimpse(dados)
+```
+
+```{r}
+exemplo1 = dados %>% 
+    filter(!is.na(internet)) %>% 
+    select(responderam_prop, internet)
+
+exemplo2 = dados %>% 
+    filter(!is.na(pdi)) %>% 
+    select(responderam_prop, pdi)
+```
+
+```{r}
+exemplo1 %>% 
+    ggplot(aes(x = internet, y = responderam_prop)) + 
+    geom_point(size = 4, alpha = .5, color = "dodgerblue") + 
+    geom_hline(yintercept = mean(exemplo1$responderam_prop), color = "gray") + 
+    geom_vline(xintercept = mean(exemplo1$internet), color = "gray")
+```
+
+```{r}
+exemplo2 %>% 
+    ggplot(aes(x = pdi, y = responderam_prop)) + 
+    geom_point(size = 4, alpha = .5, color = "coral") + 
+    geom_hline(yintercept = mean(exemplo1$responderam_prop), color = "gray") + 
+    geom_vline(xintercept = mean(exemplo1$internet), color = "gray")
+```
+
+## Coef. de Correlação Linear de PEARSON
+
+```{r}
+exemplo1 %>% 
+    mutate(desvio_x = internet - mean(internet), 
+           desvio_y = responderam_prop - mean(responderam_prop), 
+           concordancia = desvio_x * desvio_y) %>% 
+    summarise(
+        concordancia = sum(concordancia), 
+        desvio_abs_x = sqrt(sum(desvio_x**2)),
+        desvio_abs_y = sqrt(sum(desvio_y**2)),
+        denominador = desvio_abs_x * desvio_abs_y, 
+        correlacao = concordancia / denominador
+    )
+```
+
+```{r}
+exemplo2 %>% 
+    mutate(desvio_x = pdi - mean(pdi), 
+           desvio_y = responderam_prop - mean(responderam_prop), 
+           concordancia = desvio_x * desvio_y) %>% 
+    summarise(
+        concordancia = sum(concordancia), 
+        desvio_abs_x = sqrt(sum(desvio_x**2)),
+        desvio_abs_y = sqrt(sum(desvio_y**2)),
+        denominador = desvio_abs_x * desvio_abs_y, 
+        correlacao = concordancia / denominador
+    )
+```
+
+
+```{r}
+dados %>% 
+    filter(!is.na(internet)) %>% 
+    summarise(corr_pearson = cor(internet, responderam_prop, method = "pearson"))
+```
+```{r}
+dados %>% 
+    filter(!is.na(pdi)) %>% 
+    summarise(corr_pearson = cor(pdi, responderam_prop, method = "pearson"))
+```
+
+
