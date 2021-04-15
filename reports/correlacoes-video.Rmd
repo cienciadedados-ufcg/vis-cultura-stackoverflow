@@ -7,6 +7,7 @@ output: html_notebook
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(here)
+library(skimr)
 theme_set(theme_bw())
 ```
 
@@ -23,10 +24,88 @@ dados_raw = read_csv(
         six_regions = col_character(),
         `World bank income group 2017` = col_character()
     )
-)
+) %>% janitor::clean_names()
 
 dados = dados_raw %>% 
     filter(usuarios > 200, site == "StackOverflow")
 
-glimpse(dados_raw)
+glimpse(dados)
 ```
+
+```{r}
+dados %>% 
+    skim()
+```
+
+Scatter plot ou Gráfico de Dispersão
+
+Aspectos de uma relação: 
+    Formato (linear, outros formato)
+    Sinal (pos / neg)
+    Força/intensidade
+    Pontos que fogem à tendência
+
+
+```{r}
+dados %>% 
+    ggplot(aes(x = epi, y = responderam_prop)) + 
+    geom_point(size = 6)
+```
+
+```{r}
+dados %>% 
+    filter(!is.na(epi), responderam_prop < .41, epi > 45)
+```
+```{r}
+dados %>% 
+    ggplot(aes(x = pdi, y = responderam_prop)) + 
+    geom_point(size = 6, alpha = .4)
+```
+
+```{r}
+dados %>% 
+    ggplot(aes(x = longitude, responderam_prop)) + 
+    geom_point(size = 6, alpha = .5)
+```
+
+```{r}
+dados %>% 
+    mutate(aleatoria = runif(n())) %>% 
+    ggplot(aes(x = aleatoria, y = responderam_prop)) + 
+    geom_point(size = 5)
+```
+
+
+```{r}
+dados %>% 
+    mutate(muito_parecida = -2 * responderam_prop + runif(n(), min = .1, max = .75)) %>% 
+    ggplot(aes(x = muito_parecida, y = responderam_prop)) + 
+    geom_point(size = 5)
+```
+
+```{r}
+dados %>% 
+    filter(!is.na(gni)) %>% 
+    ggplot(aes(x = gni, y = responderam_prop)) +
+    geom_point(size = 6, alpha = .5)
+```
+
+```{r}
+dados %>% 
+    filter(!is.na(gni)) %>% 
+    ggplot(aes(x = gni, y = responderam_prop)) +
+    geom_point(size = 6, alpha = .5) + 
+    scale_x_log10()
+    
+```
+
+Então existe uma relação linear entre atuação e log_10(gni). 
+
+```{r}
+dados %>% 
+    filter(!is.na(gni)) %>% 
+    mutate(gni_log = log10(gni)) %>% 
+    ggplot(aes(x = gni_log, y = responderam_prop)) +
+    geom_point(size = 6, alpha = .5) 
+```
+
