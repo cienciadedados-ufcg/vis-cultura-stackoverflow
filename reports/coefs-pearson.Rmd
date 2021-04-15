@@ -99,4 +99,59 @@ dados %>%
     summarise(corr_pearson = cor(pdi, responderam_prop, method = "pearson"))
 ```
 
+## Valores extremos
+
+```{r}
+extremo = tibble(internet = 10, responderam_prop = 1)
+
+exemplo1 %>% 
+    bind_rows(extremo) %>% 
+    ggplot(aes(x = internet, y = responderam_prop)) + 
+    geom_point(size = 4, alpha = .5, color = "dodgerblue")
+```
+
+```{r}
+dados %>% 
+    bind_rows(extremo) %>% 
+    filter(!is.na(internet)) %>% 
+    summarise(corr_pearson = cor(internet, responderam_prop, method = "pearson"))
+```
+
+## Relação NÃO LINEAR entre as variáveis
+
+```{r}
+dados %>% 
+    mutate(log_gni = log10(gni)) %>% 
+    ggplot(aes(x = log_gni, y = responderam_prop)) + 
+    geom_point(size = 5, color = "orange", alpha = .4) 
+```
+
+```{r}
+dados %>%
+    filter(!is.na(gni)) %>% 
+    select(responderam_prop, gni) %>% 
+    mutate(log_gni = log10(gni)) %>% 
+    summarise(pearson_log = cor(log_gni, responderam_prop, method = "pearson"), 
+              pearson = cor(gni, responderam_prop, method = "pearson"))
+```
+
+```{r}
+animais = MASS::Animals
+
+animais %>% 
+    ggplot(aes(x = body, y = brain)) + 
+    geom_point(size = 2, color = "darkred", alpha = .4) + 
+    scale_x_log10() + 
+    scale_y_log10()
+```
+
+log(brain) = a + b.log(body)
+
+```{r}
+animais %>% 
+    summarise(
+        pearson_st = cor(brain, body, method = "pearson"),
+        pearson_transf = cor(log10(brain), log10(body), method = "pearson")
+    )
+```
 

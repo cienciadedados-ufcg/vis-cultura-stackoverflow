@@ -1,0 +1,48 @@
+---
+title: "Outros coeficientes de correlação"
+output: html_notebook
+---
+
+Coef. de Pearson (r)
+Coef. de Spearman (rho)
+Coef. de Kendall (tau)
+
+```{r}
+animais = MASS::Animals
+glimpse(animais)
+```
+
+
+```{r}
+animais %>% 
+    mutate(body_rank = rank(body), 
+           brain_rank = rank(brain)) %>% 
+    ggplot(aes(x = body_rank, y = brain_rank)) + 
+    geom_point(size = 2, color = "darkred", alpha = .4) 
+```
+
+## Spearman
+
+```{r}
+animais %>% 
+    mutate(body_rank = rank(body), 
+           brain_rank = rank(brain)) %>% 
+    summarise(
+        transformado = cor(brain_rank, body_rank, method = "pearson"), 
+        spearman = cor(brain, body, method = "spearman")
+    )
+```
+
+## Kendall 
+
+```{r}
+animais %>% 
+    mutate(body_rank = rank(body), 
+           brain_rank = rank(brain)) %>% 
+    summarise(
+        transformado = cor(brain_rank, body_rank, method = "pearson"), 
+        spearman = cor(brain, body, method = "spearman"), 
+        kendall = cor(brain, body, method = "kendall")
+    )
+```
+
